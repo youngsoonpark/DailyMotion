@@ -14,8 +14,8 @@ development:
   reconnect: false
   database: DailyMotion_development
   pool: 5
-  username: root
-  password:
+  username: betterflow
+  password: hogehoge
   host: localhost
 
 # Warning: The database defined as "test" will be erased and
