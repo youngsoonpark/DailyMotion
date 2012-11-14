@@ -11,7 +11,7 @@ public class DailyMotionHelper {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, REQUEST_GALLERY);
     }
     
     public static void launchTimelineActivity(Context context, Class targetClass) {
