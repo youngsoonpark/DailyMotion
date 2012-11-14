@@ -4,6 +4,7 @@ import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.R.id;
 import com.rejasupotaro.dailymotion.R.layout;
 import com.rejasupotaro.dailymotion.R.menu;
+import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
@@ -20,17 +22,21 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView animationView = (ImageView) findViewById(R.id.image_animation_view);
+        animationView.setOnClickListener(new View.OnClickListener() {
+            
+            public void onClick(View v) {
+                DailyMotionHelper.launchGallarey(MainActivity.this);
+            }
+        });
+        
         Button closeButton = (Button) findViewById(R.id.button_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                launchTimelineActivity(MainActivity.this, TimelineActivity.class);
+                DailyMotionHelper.launchTimelineActivity(MainActivity.this, TimelineActivity.class);
             }
         });
-    }
-    
-    private void launchTimelineActivity(Context context, Class targetClass) {
-        context.startActivity(new Intent(context, targetClass));
     }
 
     @Override
