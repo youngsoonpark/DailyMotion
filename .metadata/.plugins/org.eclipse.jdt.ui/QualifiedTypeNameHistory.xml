@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+<fullyQualifiedTypeName name="com.rejasupotaro.dailymotion.TimelineActivity"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="android.webkit.WebView"/>
+<fullyQualifiedTypeName name="com.rejasupotaro.dailymotion.R.id"/>
+<fullyQualifiedTypeName name="android.webkit.WebChromeClient"/>
+<fullyQualifiedTypeName name="android.webkit.WebViewClient"/>
+</qualifiedTypeNameHistroy>
