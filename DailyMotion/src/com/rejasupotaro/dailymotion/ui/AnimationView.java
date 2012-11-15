@@ -13,10 +13,10 @@ import android.widget.ImageView;
 public class AnimationView extends ImageView {
 
     private static final String TAG = AnimationView.class.getSimpleName();
-    private static final int DEFAULT_ANIMATION_INTERVAL = 200;
+    private static final int MAX_ANIMATION_INTERVAL = 300;
 
     private List<Bitmap> mBitmapList;
-    private int animationInterval = DEFAULT_ANIMATION_INTERVAL;
+    private int animationInterval = MAX_ANIMATION_INTERVAL / 2;
     private Thread mThread;
     private Handler mHandler;
     private int showingIndex;
@@ -56,6 +56,6 @@ public class AnimationView extends ImageView {
     }
 
     public void setAnimationInterval(int per) {
-        animationInterval = (int) (DEFAULT_ANIMATION_INTERVAL * (per / 100.0)) + 30;
+        animationInterval = (int) (MAX_ANIMATION_INTERVAL * (per / 100.0)) + 30;
     }
 }

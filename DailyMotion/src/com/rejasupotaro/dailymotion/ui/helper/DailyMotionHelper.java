@@ -16,6 +16,7 @@ import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 
 import com.rejasupotaro.dailymotion.DailyMotionUtils;
+import com.rejasupotaro.dailymotion.model.AnimationImageList;
 
 public class DailyMotionHelper {
 
@@ -40,9 +41,9 @@ public class DailyMotionHelper {
         mActivity.startActivity(new Intent(mActivity, targetClass));
     }
 
-    public List<Bitmap> loadBitmapFromIntent(Intent intent) {
-        List<Bitmap> bitmapList = new ArrayList<Bitmap>();
-        if (intent == null) return bitmapList;
+    public AnimationImageList loadImageFromIntent(Intent intent) {
+        AnimationImageList animationImageList = new AnimationImageList();
+        if (intent == null) return animationImageList;
 
         ContentResolver contentResolver = mActivity.getContentResolver();
         if (intent.hasExtra(EXTRA_STREAM)) {
@@ -54,9 +55,10 @@ public class DailyMotionHelper {
                 imageUriList.add((Uri) intent.getExtras().get(EXTRA_STREAM));
             }
             if (imageUriList.size() > 0) {
-                for (Uri uri: imageUriList) {
+                for (Uri imageUri: imageUriList) {
                     try {
-                        bitmapList.add(Media.getBitmap(contentResolver, uri));
+                        Bitmap bitmap = Media.getBitmap(contentResolver, imageUri);
+                        animationImageList.add(imageUri, bitmap);
                     } catch (FileNotFoundException e) {
                         Log.v(TAG, "Content resolve filed", e);
                     } catch (IOException e) {
@@ -68,9 +70,9 @@ public class DailyMotionHelper {
             InputStream inputStream = null;
             try {
                 Uri imageUri = intent.getData();
-                if (imageUri == null) return bitmapList;
+                if (imageUri == null) return animationImageList;
                 inputStream = contentResolver.openInputStream(imageUri);
-                bitmapList.add(BitmapFactory.decodeStream(inputStream));
+                animationImageList.add(imageUri, BitmapFactory.decodeStream(inputStream));
             } catch (IOException e) {
                 Log.e(TAG, "Decode failed", e);
             } finally {
@@ -78,6 +80,6 @@ public class DailyMotionHelper {
             }
         }
 
-        return bitmapList;
+        return animationImageList;
     }
 }
