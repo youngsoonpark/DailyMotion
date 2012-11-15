@@ -18,7 +18,7 @@ import android.util.Log;
 import com.rejasupotaro.dailymotion.DailyMotionUtils;
 
 public class DailyMotionHelper {
-    
+
     private static final String TAG = DailyMotionHelper.class.getSimpleName();
     private static final String EXTRA_STREAM = "android.intent.extra.STREAM";
     public static final int REQUEST_GALLERY = 0;
@@ -47,15 +47,11 @@ public class DailyMotionHelper {
         ContentResolver contentResolver = mActivity.getContentResolver();
         if (intent.hasExtra(EXTRA_STREAM)) {
             List<Uri> imageUriList = new ArrayList<Uri>();
-            try{
-                String action = intent.getAction();
-                if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
-                    imageUriList = (List<Uri>) intent.getExtras().get(EXTRA_STREAM);
-                } else if (Intent.ACTION_SEND.equals(action)) {
-                    imageUriList.add((Uri) intent.getExtras().get(EXTRA_STREAM));
-                }
-            } catch(Exception e){
-                Log.v(TAG, "Uri parse failed", e);
+            String action = intent.getAction();
+            if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+                imageUriList = (List<Uri>) intent.getExtras().get(EXTRA_STREAM);
+            } else if (Intent.ACTION_SEND.equals(action)) {
+                imageUriList.add((Uri) intent.getExtras().get(EXTRA_STREAM));
             }
             if (imageUriList.size() > 0) {
                 for (Uri uri: imageUriList) {
@@ -71,9 +67,11 @@ public class DailyMotionHelper {
         } else {
             InputStream inputStream = null;
             try {
-                inputStream = contentResolver.openInputStream(intent.getData());
+                Uri imageUri = intent.getData();
+                if (imageUri == null) return bitmapList;
+                inputStream = contentResolver.openInputStream(imageUri);
                 bitmapList.add(BitmapFactory.decodeStream(inputStream));
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e(TAG, "Decode failed", e);
             } finally {
                 DailyMotionUtils.close(inputStream);
