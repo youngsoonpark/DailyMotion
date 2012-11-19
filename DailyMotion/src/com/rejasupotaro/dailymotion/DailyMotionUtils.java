@@ -10,11 +10,10 @@ public class DailyMotionUtils {
 
     public static void close(Closeable closeable) {
         if (closeable == null) return;
-
         try {
             closeable.close();
         } catch (IOException e) {
-            Log.e(TAG, "An Error occurred in DailyMotionpUrils.close()", e);
+            Log.e(TAG, "An error occurred in DailyMotionpUtils.close()", e);
         }
     }
 }

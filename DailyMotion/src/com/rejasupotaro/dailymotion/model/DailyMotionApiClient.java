@@ -50,13 +50,12 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     public static final String CONTENTTYPE_BINARY = "application/octet-stream";
     public static final String CONTENTTYPE_ZIP = "application/zip";
     public static final String CONTENTTYPE_XML = "application/xml";
-    private static final int BUFF_SIZE = 10240;
+    private static final int BUFFER_SIZE = 10240;
 
     private static final int DEFAULT_BUFFSIZE = -1;
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
     private Context mContext;
-    private DefaultHttpClient httpClient;
     private String responseMessage;
     private List<Uri> mUriList;
     private List<FileBody> mFileBodyList;
@@ -75,13 +74,11 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
 
     @Override
     public Void loadInBackground() {
-        Log.d("DEBUG", "loadInBackground");
-
         Log.d("DEBUG", mContext.getExternalCacheDir().getPath() + "/out.zip");
         File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mUriList);
 
         try {
-            fileUpload(Constants.APP_SITE_URL,
+            fileUpload(Constants.API_GENERATE_GIF_URL,
                     new NameValuePair(UPLOAD_FILE_NAME, "rejasupotaro"),
                     new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()));
         } catch (IOException e) {
@@ -99,6 +96,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     public StatusLine fileUpload(String url,
             NameValuePair titleNameValuePair,
             NameValuePair fileNameValuePair) throws IOException {
+        final DefaultHttpClient httpClient = new DefaultHttpClient();
         final HttpPost httpPost = new HttpPost(url);
 
         final MultipartEntity reqEntity =
@@ -115,6 +113,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
 
     public StatusLine sendBinaryFile(String url,
             String absoluteFilePath) throws IOException {
+        final DefaultHttpClient httpClient = new DefaultHttpClient();
         final File file = new File(absoluteFilePath);
         final HttpPost httpPost = new HttpPost(url);
         // length==-1 then BUFF_SIZE=2048
@@ -129,6 +128,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     public StatusLine sendSpecifiedFile(String url,
             String absoluteFilePath,
             String contentType) throws IOException  {
+        final DefaultHttpClient httpClient = new DefaultHttpClient();
         final File file = new File(absoluteFilePath);
         final HttpPost httpPost = new HttpPost(url);
         final FileEntity reqEntity = new FileEntity(file, contentType);
@@ -175,7 +175,6 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     }
 
     private File toZip(String outputFilePath, List<Uri> inputFileUriList) {
-        // 古いファイルを削除
         File oldFile = new File(outputFilePath);
         if (oldFile.isFile()) {
             oldFile.delete();
@@ -187,25 +186,32 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
             zipOutputStream = new ZipOutputStream(
                     new BufferedOutputStream(new FileOutputStream(outputFilePath)));
 
-            byte[] buffer = new byte[BUFF_SIZE];
+            byte[] buffer = new byte[BUFFER_SIZE];
             for (int i = 0; i < inputFileUriList.size(); i++) {
                 String filePath = getPath(inputFileUriList.get(i));
                 bufferedInputStream = new BufferedInputStream(
-                        new FileInputStream(new File(filePath)), BUFF_SIZE);
+                        new FileInputStream(new File(filePath)), BUFFER_SIZE);
                 final ZipEntry entry = new ZipEntry(i +  ".jpg");
                 zipOutputStream.putNextEntry(entry);
                 int len = 0;
-                while ((len = bufferedInputStream.read(buffer, 0, BUFF_SIZE)) != -1) {
+                while ((len = bufferedInputStream.read(buffer, 0, BUFFER_SIZE)) != -1) {
                     zipOutputStream.write(buffer, 0, len);
                 }
                 zipOutputStream.closeEntry();
             }
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "toZip():OutZipFileNotError=" +e.getMessage());
+            Log.e(TAG, e.getMessage());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         } finally {
+            if (zipOutputStream != null) {
+                try {
+                    zipOutputStream.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             DailyMotionUtils.close(zipOutputStream);
             DailyMotionUtils.close(bufferedInputStream);
         }
@@ -217,10 +223,15 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     private String getPath(Uri uri) {
         ContentResolver contentResolver = mContext.getContentResolver();
         String[] columns = { MediaStore.Images.Media.DATA };
-        Cursor cursor = contentResolver.query(uri, columns, null, null, null);
-        cursor.moveToFirst();
-        String path = cursor.getString(0);
-        cursor.close();
+        Cursor cursor = null;
+        String path = null;
+        try {
+            cursor = contentResolver.query(uri, columns, null, null, null);
+            cursor.moveToFirst();
+            path = cursor.getString(0);
+        } finally {
+            if (cursor != null) cursor.close();
+        }
         return path;
     }
 }
