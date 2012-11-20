@@ -25,8 +25,8 @@ local.properties
 .sass-cache
 capybara-*.html
 .rspec
-/.bundle
-/vendor/bundle
+server/.bundle
+server/vendor/*
 /log/*
 /tmp/*
 /db/*.sqlite3
