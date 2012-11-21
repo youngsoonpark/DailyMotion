@@ -36,6 +36,7 @@ public class TimelineActivity extends Activity {
                 return true;
             }
         });
+        timelineWebView.clearCache(true);
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
     }
 

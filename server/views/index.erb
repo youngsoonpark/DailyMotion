@@ -3,12 +3,12 @@
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
   </head>
   <body>
+    image_count: <%= @image_count %>
     <% for i in 0..(@image_count - 1) do %>
       title: タイトル<br>
       Like!
       <img id="gifimage" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
     <% end %>
-    image_count: <%= @image_count %>
   </body>
 </html>
 

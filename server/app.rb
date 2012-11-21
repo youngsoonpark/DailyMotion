@@ -19,12 +19,8 @@ post '/api/convert' do
 
   output_path = 'tmp/out'
   result = zip_to_gif(zipfile_path, 'tmp/out')
+  system('rm -rf tmp/*')
 
-  if result
-    200
-  elsif
-    500
-  end
 end
 
 def get_file_count
