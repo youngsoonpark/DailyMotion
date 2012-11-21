@@ -28,7 +28,7 @@ post '/' do
 end
 
 def get_file_count
-  return Find.find('public').count - 1
+  return Find.find('public/images/gifs/').count - 1
 end
 
 def convert_command_builder(image_path_array, delay, max_size)
@@ -42,7 +42,10 @@ def convert_command_builder(image_path_array, delay, max_size)
 
   image_count = get_file_count()
 
-  return 'convert ' + resize_option + ' ' + delay_option + ' ' + body + 'public/' + count.to_s + '.gif'
+  return 'convert '
+    + resize_option + ' '
+    + delay_option + ' '
+    + body + 'public/images/gifs/' + count.to_s + '.gif'
 end
 
 def zip_to_gif(src_path, output_path)
