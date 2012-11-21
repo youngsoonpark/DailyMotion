@@ -74,7 +74,6 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
 
     @Override
     public Void loadInBackground() {
-        Log.d("DEBUG", mContext.getExternalCacheDir().getPath() + "/out.zip");
         File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mUriList);
 
         try {

@@ -27,6 +27,7 @@ capybara-*.html
 .rspec
 server/.bundle
 server/vendor/*
+server/tmp/*
 /log/*
 /tmp/*
 /db/*.sqlite3

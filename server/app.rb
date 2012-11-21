@@ -8,6 +8,7 @@ set :port, 3000
 set :public, File.dirname(__FILE__) + '/public'
 
 get '/' do
+  @image_count = get_file_count()
   erb :index
 end
 
@@ -20,10 +21,14 @@ post '/' do
   result = zip_to_gif(zipfile_path, 'tmp/out')
 
   if result
-    'OK'
+    200
   elsif
-    'NG'
+    500
   end
+end
+
+def get_file_count
+  return Find.find('public').count - 1
 end
 
 def convert_command_builder(image_path_array, delay, max_size)
@@ -35,7 +40,7 @@ def convert_command_builder(image_path_array, delay, max_size)
     body << image << ' '
   end
 
-  count = Find.find('public').count
+  image_count = get_file_count()
 
   return 'convert ' + resize_option + ' ' + delay_option + ' ' + body + 'public/' + count.to_s + '.gif'
 end

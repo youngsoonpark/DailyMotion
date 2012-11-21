@@ -2,7 +2,10 @@
   <head>
   </head>
   <body>
-    Hello World!
+    <% for i in 0..1 do %>
+      <img src="<%= i %>.gif"><br>
+    <% end %>
+    image_count: <%= @image_count %>
   </body>
 </html>
 
