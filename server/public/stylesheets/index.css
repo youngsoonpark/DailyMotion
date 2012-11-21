@@ -1,0 +1,9 @@
+#gifimage {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  width: 240px;
+  height: 240px;
+  -o-object-fit: contain;
+}
+
