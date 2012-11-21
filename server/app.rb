@@ -12,7 +12,7 @@ get '/' do
   erb :index
 end
 
-post '/' do
+post '/api/convert' do
   zipfile = params['upload_file_contents']
   zipfile_path = 'tmp/' + zipfile[:filename]
   File.binwrite(zipfile_path, zipfile[:tempfile].read)
@@ -33,19 +33,18 @@ end
 
 def convert_command_builder(image_path_array, delay, max_size)
   resize_option = '-resize ' + max_size.to_s + 'x' + max_size.to_s
+  p resize_option
   delay_option = '-delay ' + delay.to_s
+  p delay_option
 
   body = '';
   image_path_array.each do |image|
     body << image << ' '
   end
 
-  image_count = get_file_count()
+  file_count = get_file_count()
 
-  return 'convert '
-    + resize_option + ' '
-    + delay_option + ' '
-    + body + 'public/images/gifs/' + count.to_s + '.gif'
+  return 'convert ' + resize_option + ' ' + delay_option + ' ' + body + 'public/images/gifs/' + file_count.to_s + '.gif'
 end
 
 def zip_to_gif(src_path, output_path)
