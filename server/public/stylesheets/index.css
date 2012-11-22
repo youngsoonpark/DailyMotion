@@ -1,6 +1,16 @@
-#gifimage {
+* {
+  color: #333;
+  background-color: #eee;
+}
+#gif_box {
+  background-color: #fff;
   -webkit-border-radius: 12px;
   -moz-border-radius: 12px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+#gif_image {
   border-radius: 12px;
   width: 240px;
   height: 240px;

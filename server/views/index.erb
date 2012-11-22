@@ -5,9 +5,11 @@
   <body>
     image_count: <%= @image_count %>
     <% for i in 0..(@image_count - 1) do %>
-      title: タイトル<br>
-      Like!
-      <img id="gifimage" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
+      <div id="gif_box">
+        title: タイトル<br>
+        <img id="gif_image" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
+        Comments Likes
+      </div>
     <% end %>
   </body>
 </html>

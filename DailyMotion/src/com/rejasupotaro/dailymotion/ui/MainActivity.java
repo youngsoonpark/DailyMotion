@@ -87,7 +87,6 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
     }
 
     public Loader<String> onCreateLoader(int id, Bundle args) {
-        Log.d("DEBUG", "onCreateLoader");
         if(args == null) return null;
 
         switch (id) {
