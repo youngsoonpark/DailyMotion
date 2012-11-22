@@ -2,7 +2,6 @@ require 'rubygems'
 require 'sinatra'
 require 'zipruby'
 require 'find'
-require 'RMagick'
 
 set :port, 3000
 set :public, File.dirname(__FILE__) + '/public'
