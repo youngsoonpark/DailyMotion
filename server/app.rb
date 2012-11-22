@@ -12,6 +12,7 @@ get '/' do
 end
 
 post '/api/convert' do
+  image_title = params['image_title']
   zipfile = params['contents']
   zipfile_path = 'tmp/' + zipfile[:filename]
   File.binwrite(zipfile_path, zipfile[:tempfile].read)

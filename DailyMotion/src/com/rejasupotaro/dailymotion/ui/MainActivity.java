@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
 
         switch (id) {
         case REQUEST_UPLOAD:
-            return new DailyMotionApiClient(this, mAnimationImageList.getUriList(), mAnimationImageList.getFileBodyList(), mAnimationView.getDelay());
+            return new DailyMotionApiClient(this, "かわいみGIF", mAnimationImageList.getUriList(), mAnimationImageList.getFileBodyList(), mAnimationView.getDelay());
         default:
             Log.v(TAG, "Can't create AsyncTaskLoader. Undefined id: " + id);
             return null;

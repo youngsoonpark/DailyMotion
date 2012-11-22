@@ -24,6 +24,11 @@
         android:layout_margin="12dip"
         android:max="100"
         android:progress="50" />
+    
+    <EditText 
+        android:id="@+id/edit_text_image_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

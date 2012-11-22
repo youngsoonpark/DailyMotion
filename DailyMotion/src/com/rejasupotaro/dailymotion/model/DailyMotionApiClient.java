@@ -45,9 +45,9 @@ import com.rejasupotaro.dailymotion.DailyMotionUtils;
 public class DailyMotionApiClient extends AsyncTaskLoader<String> {
 
     private static final String TAG = DailyMotionApiClient.class.getSimpleName();
-    public static final String UPLOAD_FILE_NAME = "file_name";
+    public static final String UPLOAD_IMAGE_TITLE = "image_title";
     public static final String UPLOAD_FILE_CONTENTS = "contents";
-    public static final String UPLOAD_FILE_DELAY = "delay";
+    public static final String UPLOAD_ANIMATION_DELAY = "delay";
     public static final String CONTENTTYPE_BINARY = "application/octet-stream";
     public static final String CONTENTTYPE_ZIP = "application/zip";
     public static final String CONTENTTYPE_XML = "application/xml";
@@ -58,6 +58,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
 
     private Context mContext;
     private String responseMessage;
+    private String mImageTitle;
     private List<Uri> mUriList;
     private List<FileBody> mFileBodyList;
     private String mResult;
@@ -67,9 +68,10 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
         super(context);
     }
 
-    public DailyMotionApiClient(Context context, List<Uri> uriList, List<FileBody> fileBodyList, int delay) {
+    public DailyMotionApiClient(Context context, String imageTitle, List<Uri> uriList, List<FileBody> fileBodyList, int delay) {
         super(context);
         mContext = context;
+        mImageTitle = imageTitle;
         mUriList = uriList;
         mFileBodyList = fileBodyList;
         mDelay = delay;
@@ -81,9 +83,9 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
 
         try {
             fileUpload(Constants.API_GENERATE_GIF_URL,
-                    new NameValuePair(UPLOAD_FILE_NAME, "rejasupotaro"),
+                    new NameValuePair(UPLOAD_IMAGE_TITLE, mImageTitle),
                     new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()),
-                    new NameValuePair(UPLOAD_FILE_DELAY, String.valueOf(mDelay)));
+                    new NameValuePair(UPLOAD_ANIMATION_DELAY, String.valueOf(mDelay)));
         } catch (IOException e) {
             Log.v(TAG, "Something wrong with fileUpload()");
         }
