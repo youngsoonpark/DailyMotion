@@ -60,7 +60,7 @@ def zip_to_gif(src_path, output_path, delay)
     end
   end
   
-  command = convert_command_builder(image_path_array, delay, 480)
+  command = convert_command_builder(image_path_array, delay, 360)
   p command
   rerunt = system(command)
 end

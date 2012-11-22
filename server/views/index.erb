@@ -3,10 +3,10 @@
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    image_count: <%= @image_count %>
+   image_count: <%= @image_count %>
     <% for i in 0..(@image_count - 1) do %>
       <div id="gif_box">
-        かわいみGIF<br>
+        <img src="images/icon.jpeg"> かわいみGIF<br>
         <img id="gif_image" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
         Comments Likes
       </div>
