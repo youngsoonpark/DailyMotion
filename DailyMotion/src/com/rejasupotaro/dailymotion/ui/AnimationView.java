@@ -16,7 +16,7 @@ public class AnimationView extends ImageView {
     private static final int MAX_ANIMATION_INTERVAL = 300;
 
     private List<Bitmap> mBitmapList;
-    private int animationInterval = MAX_ANIMATION_INTERVAL / 2;
+    private int mAnimationInterval = MAX_ANIMATION_INTERVAL / 2;
     private Thread mThread;
     private Handler mHandler;
     private int showingIndex;
@@ -36,7 +36,7 @@ public class AnimationView extends ImageView {
             public void run() {
                 while(true){
                     try {
-                        Thread.sleep(animationInterval);
+                        Thread.sleep(mAnimationInterval);
                     }catch(InterruptedException e){
                         Log.v(TAG, "Something wrong with AnimationView", e);
                     }
@@ -56,6 +56,10 @@ public class AnimationView extends ImageView {
     }
 
     public void setAnimationInterval(int per) {
-        animationInterval = (int) (MAX_ANIMATION_INTERVAL * (per / 100.0)) + 30;
+        mAnimationInterval = (int) (MAX_ANIMATION_INTERVAL * (per / 100.0)) + 30;
+    }
+    
+    public int getDelay() {
+        return mAnimationInterval / 10;
     }
 }

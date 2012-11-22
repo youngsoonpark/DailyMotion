@@ -17,7 +17,7 @@ import com.rejasupotaro.dailymotion.model.AnimationImageList;
 import com.rejasupotaro.dailymotion.model.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<Void> {
+public class MainActivity extends FragmentActivity implements LoaderCallbacks<String> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
@@ -86,21 +86,23 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Vo
         return true;
     }
 
-    public Loader<Void> onCreateLoader(int id, Bundle args) {
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+        Log.d("DEBUG", "onCreateLoader");
         if(args == null) return null;
 
         switch (id) {
         case REQUEST_UPLOAD:
-            return new DailyMotionApiClient(this, mAnimationImageList.getUriList(), mAnimationImageList.getFileBodyList());
+            return new DailyMotionApiClient(this, mAnimationImageList.getUriList(), mAnimationImageList.getFileBodyList(), mAnimationView.getDelay());
         default:
             Log.v(TAG, "Can't create AsyncTaskLoader. Undefined id: " + id);
             return null;
         }
     }
 
-    public void onLoadFinished(Loader<Void> arg0, Void arg1) {
+    public void onLoaderReset(Loader<String> loader) {
     }
 
-    public void onLoaderReset(Loader<Void> arg0) {
+    public void onLoadFinished(Loader<String> loader, String data) {
+        getSupportLoaderManager().destroyLoader(loader.getId());
     }
 }

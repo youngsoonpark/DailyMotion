@@ -28,6 +28,7 @@ capybara-*.html
 server/.bundle
 server/vendor/*
 server/tmp/*
+server/public/images/gifs/*
 /log/*
 /tmp/*
 /db/*.sqlite3

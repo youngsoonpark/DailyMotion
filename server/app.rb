@@ -12,12 +12,12 @@ get '/' do
 end
 
 post '/api/convert' do
-  zipfile = params['upload_file_contents']
+  zipfile = params['contents']
   zipfile_path = 'tmp/' + zipfile[:filename]
   File.binwrite(zipfile_path, zipfile[:tempfile].read)
 
   output_path = 'tmp/out'
-  result = zip_to_gif(zipfile_path, 'tmp/out')
+  result = zip_to_gif(zipfile_path, 'tmp/out', params['delay'])
   system('rm -rf tmp/*')
 
 end
@@ -42,7 +42,7 @@ def convert_command_builder(image_path_array, delay, max_size)
   return 'convert ' + resize_option + ' ' + delay_option + ' ' + body + 'public/images/gifs/' + file_count.to_s + '.gif'
 end
 
-def zip_to_gif(src_path, output_path)
+def zip_to_gif(src_path, output_path, delay)
   image_path_array = Array.new
 
   output_path = (output_path + "/").sub("//", "/")
@@ -59,7 +59,7 @@ def zip_to_gif(src_path, output_path)
     end
   end
   
-  command = convert_command_builder(image_path_array, 20, 480)
+  command = convert_command_builder(image_path_array, delay, 480)
   p command
   rerunt = system(command)
 end

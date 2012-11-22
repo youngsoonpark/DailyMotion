@@ -25,8 +25,6 @@ public class AnimationImageList {
 
         mUriList.add(uri);
         mBitmapList.add(bitmap);
-        //        Log.d(TAG, "File Uri: " + uri);
-        //        Log.d(TAG, new FileBody(new File(uri.toString()),"image/jpg").getFilename());
     }
 
     public int size() {
@@ -36,25 +34,22 @@ public class AnimationImageList {
     public List<Bitmap> getBitmapList() {
         return mBitmapList;
     }
-    
+
     public Bitmap getBitmap(int index) {
         return mBitmapList.get(index);
     }
-    
+
     public List<Uri> getUriList() {
         return mUriList;
     }
-    
+
     public List<FileBody> getFileBodyList() {
         List<FileBody> fileBodyList = new ArrayList<FileBody>();
-        
+
         for (Uri imageUri: mUriList) {
-            Log.d("DEBUG", imageUri.toString());
-            Log.d("DEBUG", imageUri.getPath());
-            
             fileBodyList.add(new FileBody(new File(imageUri.toString())));
         }
-        
+
         return fileBodyList;
     }
 }

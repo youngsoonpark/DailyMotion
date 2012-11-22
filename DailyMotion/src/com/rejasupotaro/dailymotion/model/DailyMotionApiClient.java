@@ -42,11 +42,12 @@ import android.util.Log;
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.DailyMotionUtils;
 
-public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
+public class DailyMotionApiClient extends AsyncTaskLoader<String> {
 
     private static final String TAG = DailyMotionApiClient.class.getSimpleName();
-    public static final String UPLOAD_FILE_NAME = "upload_file_name";
-    public static final String UPLOAD_FILE_CONTENTS = "upload_file_contents";
+    public static final String UPLOAD_FILE_NAME = "file_name";
+    public static final String UPLOAD_FILE_CONTENTS = "contents";
+    public static final String UPLOAD_FILE_DELAY = "delay";
     public static final String CONTENTTYPE_BINARY = "application/octet-stream";
     public static final String CONTENTTYPE_ZIP = "application/zip";
     public static final String CONTENTTYPE_XML = "application/xml";
@@ -59,27 +60,30 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
     private String responseMessage;
     private List<Uri> mUriList;
     private List<FileBody> mFileBodyList;
+    private String mResult;
+    private int mDelay;
 
     public DailyMotionApiClient(Context context) {
         super(context);
     }
 
-    public DailyMotionApiClient(Context context, List<Uri> uriList, List<FileBody> fileBodyList) {
+    public DailyMotionApiClient(Context context, List<Uri> uriList, List<FileBody> fileBodyList, int delay) {
         super(context);
         mContext = context;
         mUriList = uriList;
         mFileBodyList = fileBodyList;
-
+        mDelay = delay;
     }
 
     @Override
-    public Void loadInBackground() {
+    public String loadInBackground() {
         File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mUriList);
 
         try {
             fileUpload(Constants.API_GENERATE_GIF_URL,
                     new NameValuePair(UPLOAD_FILE_NAME, "rejasupotaro"),
-                    new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()));
+                    new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()),
+                    new NameValuePair(UPLOAD_FILE_DELAY, String.valueOf(mDelay)));
         } catch (IOException e) {
             Log.v(TAG, "Something wrong with fileUpload()");
         }
@@ -87,14 +91,8 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
         return null;
     }
 
-    @Override
-    protected void onStartLoading() {
-        forceLoad();
-    }
-
-    public StatusLine fileUpload(String url,
-            NameValuePair titleNameValuePair,
-            NameValuePair fileNameValuePair) throws IOException {
+    public StatusLine fileUpload(String url, NameValuePair titleNameValuePair, NameValuePair fileNameValuePair,
+            NameValuePair delayNameValuePair) throws IOException {
         final DefaultHttpClient httpClient = new DefaultHttpClient();
         final HttpPost httpPost = new HttpPost(url);
 
@@ -105,6 +103,8 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
         final File file = new File(fileNameValuePair.getValue());
         reqEntity.addPart(fileNameValuePair.getName(),
                 new FileBody(file, CONTENTTYPE_BINARY));
+        reqEntity.addPart(delayNameValuePair.getName(),
+                new StringBody(delayNameValuePair.getValue(), DEFAULT_CHARSET));
 
         httpPost.setEntity(reqEntity);
         return getResponseStatusLine(httpClient, httpPost);
@@ -232,5 +232,43 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Void> {
             if (cursor != null) cursor.close();
         }
         return path;
+    }
+
+    @Override
+    public void deliverResult(String result) {
+        if (isReset()) {
+            if (mResult != null) {
+                mResult = null;
+            }
+            return;
+        }
+
+        mResult = result;
+        if (isStarted()) {
+            super.deliverResult(result);
+        }
+    }
+
+
+    @Override
+    protected void onStartLoading() {
+        if (mResult != null) {
+            deliverResult(mResult);
+        }
+        if (takeContentChanged() || mResult == null) {
+            forceLoad();
+        }
+    }
+    
+    @Override
+    protected void onStopLoading() {
+        super.onStopLoading();
+        cancelLoad();
+    }
+
+    @Override
+    protected void onReset() {
+        super.onReset();
+        onStopLoading();
     }
 }
