@@ -3,14 +3,23 @@
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-   image_count: <%= @image_count %>
-    <% for i in 0..(@image_count - 1) do %>
-      <div id="gif_box">
-        <img src="images/icon.jpeg"> かわいみGIF<br>
-        <img id="gif_image" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
-        Comments Likes
-      </div>
-    <% end %>
+    image_count: <%= @image_count %>
+    <div id="content">
+      <% for i in 0..(@image_count - 1) do %>
+        <div id="gif_box">
+          <div id="gif_box_info">
+            <img id="gif_box_icon" src="images/icon.jpeg"> かわいみGIF<br>
+          </div>
+          <div id="gif_image_wrapper">
+            <img id="gif_image" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
+          </div>
+          <div id="gif_box_feedback">
+            <img id="gif_box_comment" src="images/comment.png">
+            <img id="gif_box_like" src="images/like.png">
+          </div>
+        </div>
+      <% end %>
+    </div>
   </body>
 </html>
 

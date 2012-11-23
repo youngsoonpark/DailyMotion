@@ -2,18 +2,56 @@
   color: #333;
   background-color: #eee;
 }
+
+#content {
+  width: 280px;
+  margin: 0 auto;
+}
+
 #gif_box {
   background-color: #fff;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  padding: 12px;
-  margin-top: 12px;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 16px;
+}
+
+#gif_box_info {
+  background-color: #fff;
+}
+
+#gif_box_icon {
+  vertical-align: middle;
+}
+
+#gif_image_wrapper {
+  background-color: #000;
+  margin-top: 6px;
+  padding: 6px;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
 }
 
 #gif_image {
-  border-radius: 12px;
-  width: 240px;
-  height: 240px;
-  -o-object-fit: contain;
+  width: 228px;
+  height: 228px;
+  margin: 0 auto;
 }
 
+#gif_box_feedback {
+  background-color: #fff;
+  margin-top: 16px;
+}
+
+#gif_box_comment {
+  background-color: #fff;
+}
+
+#gif_box_like {
+  background-color: #fff;
+  margin-left: 16px;
+}
