@@ -11,11 +11,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
-public class AnimationImageList {
+public class AnimationEntity {
     List<Uri> mUriList;
     List<Bitmap> mBitmapList;
 
-    public AnimationImageList() {
+    public AnimationEntity() {
         mUriList = new ArrayList<Uri>();
         mBitmapList = new ArrayList<Bitmap>();
     }

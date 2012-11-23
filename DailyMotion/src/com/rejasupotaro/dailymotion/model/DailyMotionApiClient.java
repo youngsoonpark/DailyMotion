@@ -40,7 +40,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.rejasupotaro.dailymotion.Constants;
-import com.rejasupotaro.dailymotion.DailyMotionUtils;
+import com.rejasupotaro.dailymotion.CloseableUtils;
 
 public class DailyMotionApiClient extends AsyncTaskLoader<String> {
 
@@ -213,8 +213,8 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
                     e.printStackTrace();
                 }
             }
-            DailyMotionUtils.close(zipOutputStream);
-            DailyMotionUtils.close(bufferedInputStream);
+            CloseableUtils.close(zipOutputStream);
+            CloseableUtils.close(bufferedInputStream);
         }
 
         File result = new File(outputFilePath);

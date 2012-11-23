@@ -13,7 +13,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.rejasupotaro.dailymotion.R;
-import com.rejasupotaro.dailymotion.model.AnimationImageList;
+import com.rejasupotaro.dailymotion.ToastUtils;
+import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.model.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
 
@@ -24,7 +25,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
 
     private DailyMotionHelper mDailyMotionHelper;
     private AnimationView mAnimationView;
-    private AnimationImageList mAnimationImageList;
+    private AnimationEntity mAnimationEntity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,24 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
         mAnimationView.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                mDailyMotionHelper.launchGallarey();
+                if (mAnimationEntity.size() == 0) {
+                    mDailyMotionHelper.launchGallarey();
+                }
+            }
+        });
+
+        Button postButton = (Button) findViewById(R.id.button_post);
+        postButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getSupportLoaderManager().initLoader(
+                        REQUEST_UPLOAD, null, MainActivity.this);
+            }
+        });
+
+        Button closeButton = (Button) findViewById(R.id.button_close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mDailyMotionHelper.launchActivity(TimelineActivity.class);
             }
         });
 
@@ -50,32 +68,18 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
             }
         });
 
-        Button postButton = (Button) findViewById(R.id.button_post);
-        postButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                getSupportLoaderManager().initLoader(REQUEST_UPLOAD, new Bundle(), MainActivity.this);
-            }
-        });
-
-        Button closeButton = (Button) findViewById(R.id.button_close);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mDailyMotionHelper.launchActivity(TimelineActivity.class);
-            }
-        });
-
-        mAnimationImageList = mDailyMotionHelper.loadImageFromIntent(getIntent());
-        if (mAnimationImageList.size() > 0) {
-            mAnimationView.setupAnimation(mAnimationImageList.getBitmapList());
+        mAnimationEntity = mDailyMotionHelper.loadImageFromIntent(getIntent());
+        if (mAnimationEntity.size() > 0) {
+            mAnimationView.setupAnimation(mAnimationEntity.getBitmapList());
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if(requestCode == DailyMotionHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
-            mAnimationImageList = mDailyMotionHelper.loadImageFromIntent(getIntent());
-            if (mAnimationImageList.size() > 0) {
-                mAnimationView.setImageBitmap(mAnimationImageList.getBitmap(0));
+        if (requestCode == DailyMotionHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
+            mAnimationEntity = mDailyMotionHelper.loadImageFromIntent(getIntent());
+            if (mAnimationEntity.size() > 0) {
+                mAnimationView.setImageBitmap(mAnimationEntity.getBitmap(0));
             }
         }
     }
@@ -87,11 +91,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
     }
 
     public Loader<String> onCreateLoader(int id, Bundle args) {
-        if(args == null) return null;
-
         switch (id) {
         case REQUEST_UPLOAD:
-            return new DailyMotionApiClient(this, "かわいみGIF", mAnimationImageList.getUriList(), mAnimationImageList.getFileBodyList(), mAnimationView.getDelay());
+            return new DailyMotionApiClient(this, "かわいみGIF", mAnimationEntity.getUriList(), mAnimationEntity.getFileBodyList(), mAnimationView.getDelay());
         default:
             Log.v(TAG, "Can't create AsyncTaskLoader. Undefined id: " + id);
             return null;
@@ -101,7 +103,12 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
     public void onLoaderReset(Loader<String> loader) {
     }
 
-    public void onLoadFinished(Loader<String> loader, String data) {
-        getSupportLoaderManager().destroyLoader(loader.getId());
+    public void onLoadFinished(Loader<String> loader, String result) {
+        if (result != null) {
+            ToastUtils.show(this, R.string.upload_completed);
+            getSupportLoaderManager().destroyLoader(loader.getId());
+        } else {
+            ToastUtils.show(this, R.string.upload_completed);
+        }
     }
 }

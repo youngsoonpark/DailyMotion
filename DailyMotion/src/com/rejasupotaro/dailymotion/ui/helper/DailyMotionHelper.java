@@ -15,8 +15,8 @@ import android.net.Uri;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 
-import com.rejasupotaro.dailymotion.DailyMotionUtils;
-import com.rejasupotaro.dailymotion.model.AnimationImageList;
+import com.rejasupotaro.dailymotion.CloseableUtils;
+import com.rejasupotaro.dailymotion.model.AnimationEntity;
 
 public class DailyMotionHelper {
 
@@ -41,8 +41,8 @@ public class DailyMotionHelper {
         mActivity.startActivity(new Intent(mActivity, targetClass));
     }
 
-    public AnimationImageList loadImageFromIntent(Intent intent) {
-        AnimationImageList animationImageList = new AnimationImageList();
+    public AnimationEntity loadImageFromIntent(Intent intent) {
+        AnimationEntity animationImageList = new AnimationEntity();
         if (intent == null) return animationImageList;
 
         ContentResolver contentResolver = mActivity.getContentResolver();
@@ -76,7 +76,7 @@ public class DailyMotionHelper {
             } catch (IOException e) {
                 Log.e(TAG, "Decode failed", e);
             } finally {
-                DailyMotionUtils.close(inputStream);
+                CloseableUtils.close(inputStream);
             }
         }
 

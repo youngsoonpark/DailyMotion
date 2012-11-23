@@ -4,5 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_image_edit">ImageEditActivity</string>
+    <string name="upload_completed">アップロード完了</string>
+    <string name="upload_failed">アップロードに失敗しました</string>
+    <string name="button_text_post">POST</string>
+    <string name="button_text_timeline">TimeLine</string>
 
 </resources>

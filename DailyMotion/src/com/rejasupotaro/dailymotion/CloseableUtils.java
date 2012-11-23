@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import android.util.Log;
 
-public class DailyMotionUtils {
-    private static final String TAG = DailyMotionUtils.class.getSimpleName();
+public class CloseableUtils {
+    private static final String TAG = CloseableUtils.class.getSimpleName();
 
     public static void close(Closeable closeable) {
         if (closeable == null) return;
