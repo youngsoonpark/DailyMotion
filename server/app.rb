@@ -12,6 +12,15 @@ get '/' do
 end
 
 post '/api/convert' do
+=begin
+  client = Mysql.connect('localhost', 'betterflow', 'hogehoge', 'gif_images')
+  client.query("select col1, col2 from tblname").each do |col1, col2|
+      p col1, col2
+  end
+  stmt = my.prepare('insert into tblname (col1,col2) values (?,?)')
+  stmt.execute 123, 'abc'
+=end
+
   image_title = params['image_title']
   zipfile = params['contents']
   zipfile_path = 'tmp/' + zipfile[:filename]
