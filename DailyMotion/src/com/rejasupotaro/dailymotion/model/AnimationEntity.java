@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.james.mime4j.stream.NameValuePair;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 public class AnimationEntity {
     List<Uri> mUriList;
