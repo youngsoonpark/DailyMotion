@@ -39,10 +39,10 @@ import android.provider.MediaStore;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.CloseableUtils;
+import com.rejasupotaro.dailymotion.Constants;
 
-public class DailyMotionApiClient extends AsyncTaskLoader<String> {
+public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
 
     private static final String TAG = DailyMotionApiClient.class.getSimpleName();
     public static final String UPLOAD_IMAGE_TITLE = "image_title";
@@ -57,40 +57,40 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
     private Context mContext;
-    private String responseMessage;
-    private String mImageTitle;
-    private List<Uri> mUriList;
-    private List<FileBody> mFileBodyList;
-    private String mResult;
-    private int mDelay;
+    private AnimationEntity mAnimationEntity;
+    private String mResponseMessage;
+    private StatusLine mResult; // http://www.docjar.org/html/api/org/apache/commons/httpclient/TestStatusLine.java.html
 
     public DailyMotionApiClient(Context context) {
         super(context);
     }
 
-    public DailyMotionApiClient(Context context, String imageTitle, List<Uri> uriList, List<FileBody> fileBodyList, int delay) {
+    public DailyMotionApiClient(Context context, AnimationEntity animationEntity) {
         super(context);
+
+        if (context == null || animationEntity == null) {
+            throw new IllegalArgumentException();
+        }
+
         mContext = context;
-        mImageTitle = imageTitle;
-        mUriList = uriList;
-        mFileBodyList = fileBodyList;
-        mDelay = delay;
+        mAnimationEntity = animationEntity;
     }
 
     @Override
-    public String loadInBackground() {
-        File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mUriList);
+    public StatusLine loadInBackground() {
+        File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mAnimationEntity.getUriList());
 
+        StatusLine statusLine = null;
         try {
-            fileUpload(Constants.API_GENERATE_GIF_URL,
-                    new NameValuePair(UPLOAD_IMAGE_TITLE, mImageTitle),
+            statusLine = fileUpload(Constants.API_GENERATE_GIF_URL,
+                    new NameValuePair(UPLOAD_IMAGE_TITLE, mAnimationEntity.getTitle()),
                     new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()),
-                    new NameValuePair(UPLOAD_ANIMATION_DELAY, String.valueOf(mDelay)));
+                    new NameValuePair(UPLOAD_ANIMATION_DELAY, String.valueOf(mAnimationEntity.getDelay())));
         } catch (IOException e) {
             Log.v(TAG, "Something wrong with fileUpload()");
         }
 
-        return null;
+        return statusLine;
     }
 
     public StatusLine fileUpload(String url, NameValuePair titleNameValuePair, NameValuePair fileNameValuePair,
@@ -139,7 +139,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
     }
 
     public String getResponseMessage() {
-        return responseMessage;
+        return mResponseMessage;
     }
 
     private StatusLine getResponseStatusLine(HttpClient httpClient,
@@ -161,7 +161,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
                     while ((line = reader.readLine()) != null) {
                         buf.append(line);
                     }
-                    responseMessage = buf.toString();
+                    mResponseMessage = buf.toString();
                 } finally {
                     content.close();
                     reader.close();
@@ -205,14 +205,6 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         } finally {
-            if (zipOutputStream != null) {
-                try {
-                    zipOutputStream.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
             CloseableUtils.close(zipOutputStream);
             CloseableUtils.close(bufferedInputStream);
         }
@@ -237,7 +229,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
     }
 
     @Override
-    public void deliverResult(String result) {
+    public void deliverResult(StatusLine result) {
         if (isReset()) {
             if (mResult != null) {
                 mResult = null;
@@ -261,7 +253,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<String> {
             forceLoad();
         }
     }
-    
+
     @Override
     protected void onStopLoading() {
         super.onStopLoading();

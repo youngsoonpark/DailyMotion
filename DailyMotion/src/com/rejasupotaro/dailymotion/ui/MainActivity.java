@@ -1,5 +1,10 @@
 package com.rejasupotaro.dailymotion.ui;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
@@ -18,7 +24,7 @@ import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.model.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<String> {
+public class MainActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
@@ -90,25 +96,27 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
         return true;
     }
 
-    public Loader<String> onCreateLoader(int id, Bundle args) {
+    public Loader<StatusLine> onCreateLoader(int id, Bundle args) {
         switch (id) {
         case REQUEST_UPLOAD:
-            return new DailyMotionApiClient(this, "かわいみGIF", mAnimationEntity.getUriList(), mAnimationEntity.getFileBodyList(), mAnimationView.getDelay());
+            mAnimationEntity.setTitle(((EditText) findViewById(R.id.edit_text_image_title)).getText().toString());
+            mAnimationEntity.setDelay(mAnimationView.getDelay());
+            return new DailyMotionApiClient(this, mAnimationEntity);
         default:
             Log.v(TAG, "Can't create AsyncTaskLoader. Undefined id: " + id);
             return null;
         }
     }
 
-    public void onLoaderReset(Loader<String> loader) {
+    public void onLoaderReset(Loader<StatusLine> loader) {
     }
 
-    public void onLoadFinished(Loader<String> loader, String result) {
-        if (result != null) {
+    public void onLoadFinished(Loader<StatusLine> loader, StatusLine result) {
+        if (result.getStatusCode() == HttpStatus.SC_OK) {
             ToastUtils.show(this, R.string.upload_completed);
             getSupportLoaderManager().destroyLoader(loader.getId());
         } else {
-            ToastUtils.show(this, R.string.upload_completed);
+            ToastUtils.show(this, R.string.upload_failed);
         }
     }
 }
