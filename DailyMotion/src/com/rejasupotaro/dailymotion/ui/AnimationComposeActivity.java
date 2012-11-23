@@ -1,10 +1,9 @@
 package com.rejasupotaro.dailymotion.ui;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -24,14 +23,15 @@ import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.model.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
+public class AnimationComposeActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = AnimationComposeActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
 
     private DailyMotionHelper mDailyMotionHelper;
     private AnimationView mAnimationView;
     private AnimationEntity mAnimationEntity;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,6 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
 
         mAnimationView = (AnimationView) findViewById(R.id.image_animation_view);
         mAnimationView.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View v) {
                 if (mAnimationEntity.size() == 0) {
                     mDailyMotionHelper.launchGallarey();
@@ -54,7 +53,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
         postButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getSupportLoaderManager().initLoader(
-                        REQUEST_UPLOAD, null, MainActivity.this);
+                        REQUEST_UPLOAD, null, AnimationComposeActivity.this);
             }
         });
 
@@ -99,6 +98,10 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
     public Loader<StatusLine> onCreateLoader(int id, Bundle args) {
         switch (id) {
         case REQUEST_UPLOAD:
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.progress_uploading));
+            mProgressDialog.show();
+
             mAnimationEntity.setTitle(((EditText) findViewById(R.id.edit_text_image_title)).getText().toString());
             mAnimationEntity.setDelay(mAnimationView.getDelay());
             return new DailyMotionApiClient(this, mAnimationEntity);
@@ -112,6 +115,11 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<St
     }
 
     public void onLoadFinished(Loader<StatusLine> loader, StatusLine result) {
+        if(mProgressDialog != null && mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+        mProgressDialog = null;
+
         if (result.getStatusCode() == HttpStatus.SC_OK) {
             ToastUtils.show(this, R.string.upload_completed);
             getSupportLoaderManager().destroyLoader(loader.getId());
