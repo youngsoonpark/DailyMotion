@@ -20,7 +20,7 @@ end
 
 post '/api/convert' do
   output_path = 'images/gifs/1.gif'
-  client.query("SELECT id FROM gif_images ORDER BY id LIMIT 1").each do |row|
+  client.query("SELECT id FROM gif_images ORDER BY id DESC LIMIT 1").each do |row|
     index = row["id"].to_i + 1
     output_path = 'images/gifs/' + index.to_s + '.gif'
   end
