@@ -4,11 +4,12 @@
 }
 
 #content {
-  width: 280px;
   margin: 0 auto;
 }
 
 #gif_box {
+  margin: 10px;
+  float: left
   background-color: #fff;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
@@ -55,3 +56,6 @@
   background-color: #fff;
   margin-left: 16px;
 }
+
+#log {
+  clear: left;
