@@ -3,15 +3,14 @@
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    image_count: <%= @image_count %>
     <div id="content">
-      <% for i in 0..(@image_count - 1) do %>
+      <% @gif_image_hash.each do |title, image_url| %>
         <div id="gif_box">
           <div id="gif_box_info">
-            <img id="gif_box_icon" src="images/icon.jpeg"> かわいみGIF<br>
+            <img id="gif_box_icon" src="images/icon.jpeg"><%= title %><br>
           </div>
           <div id="gif_image_wrapper">
-            <img id="gif_image" src="images/gifs/<%= (@image_count - 1) - i %>.gif"><br>
+            <img id="gif_image" src="<%= image_url %>"><br>
           </div>
           <div id="gif_box_feedback">
             <img id="gif_box_comment" src="images/comment.png">
@@ -20,6 +19,13 @@
         </div>
       <% end %>
     </div>
+    <br>
+    <% @gif_image_hash.each do |title, image_url| %>
+      <%= title %><br>
+      => <%= image_url %><br>
+    <% end %>
+    <br>
+    image_count: <%= @image_count %>
   </body>
 </html>
 
