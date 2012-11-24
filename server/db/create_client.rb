@@ -1,7 +1,9 @@
-require 'mysql'
+#require 'mysql'
+require 'mysql2'
 
 host = 'localhost'
-user = 'user'
+username = 'betterflow'
 password = 'hogehoge'
 database = 'dailymotion'
-client = Mysql.connect(host, user, password, database)
+#client = Mysql.connect(host, username, password, database)
+client = Mysql2::Client.new(:host => host, :username => username, :password => password, :database => database)
