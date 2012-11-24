@@ -9,7 +9,7 @@
 
 #gif_box {
   margin: 10px;
-  float: left
+  float: left;
   background-color: #fff;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
@@ -59,3 +59,4 @@
 
 #log {
   clear: left;
+}
