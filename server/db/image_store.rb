@@ -1,18 +1,12 @@
+$LOAD_PATH.push('./db/')
 require 'mysql2'
+require 'mysql_client'
+
 
 class ImageStore
 
-  def initialize(
-    host = "localhost",
-    username = "betterflow",
-    password = "hogehoge",
-    database = "dailymotion")
-    
-    @client = Mysql2::Client.new(
-      :host => host,
-      :username => username,
-      :password => password,
-      :database => database)
+  def initialize
+    @client = MysqlClient.get_client()
   end
 
   def get_image_hash

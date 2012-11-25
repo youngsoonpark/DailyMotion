@@ -1,6 +1,8 @@
+$LOAD_PATH.push('./db/')
 require 'mysql2'
+require 'mysql_client'
 
-client = Mysql2::Client.new(:host => "localhost", :username => "betterflow", :password => "hogehoge", :database => "dailymotion")
+client = MysqlClient.get_client()
 
 drop_query = <<-SQL
   DROP TABLE IF EXISTS gif_images
@@ -17,4 +19,3 @@ create_query = <<-SQL
 SQL
 p create_query
 client.query(create_query)
-

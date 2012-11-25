@@ -1,4 +1,6 @@
+$LOAD_PATH.push('./db/')
 require 'mysql2'
+require 'mysql_client'
 
 id = ARGV[0]
 
@@ -7,7 +9,7 @@ if (id.nil?)
   exit()
 end
 
-client = Mysql2::Client.new(:host => "localhost", :username => "betterflow", :password => "hogehoge", :database => "dailymotion")
+client = MysqlClient.get_client()
 
 image_url = nil
 select_query = <<-SQL
