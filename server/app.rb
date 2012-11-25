@@ -1,11 +1,10 @@
 require 'rubygems'
 require 'sinatra'
 require 'zipruby'
-require 'find'
 require File.dirname(__FILE__) + '/db/image_store'
 
 set :port, 3000
-set :public, File.dirname(__FILE__) + '/public'
+set :public_folder, File.dirname(__FILE__) + '/public'
 
 get '/' do
   image_store = ImageStore.new

@@ -17,12 +17,11 @@ class ImageStore
 
   def get_image_hash
     image_hash = Hash.new
-    sql = <<-SQL
+    select_query = <<-SQL
       SELECT title, image_url FROM gif_images ORDER BY id DESC
     SQL
-
-    p sql
-    @client.query(sql).each do |row|
+    p select_query
+    @client.query(select_query).each do |row|
       image_hash[row["title"]] = row["image_url"]
     end
 
@@ -31,12 +30,11 @@ class ImageStore
 
   def get_last_id
     last_id = 1
-    sql = <<-SQL
+    select_query = <<-SQL
       SELECT id FROM gif_images ORDER BY id DESC LIMIT 1
     SQL
-
-    p sql
-    @client.query(sql).each do |row|
+    p select_query
+    @client.query(select_query).each do |row|
       last_id = row["id"].to_i + 1
     end
 
@@ -44,13 +42,12 @@ class ImageStore
   end
 
   def save_image(title, image_url)
-    sql = <<-SQL
+    insert_query = <<-SQL
       INSERT INTO gif_images (title, image_url)
       VALUES ('#{title}', '#{image_url}')
     SQL
-
-    p sql
-    @client.query(sql)
+    p insert_query
+    @client.query(insert_query)
   end
 end
 
