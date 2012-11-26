@@ -1,15 +1,21 @@
 (function() {
-  window.onload = function() {
-
-    onImageClick = function() {
-      callDeviceMethod({
-        method: "download.image",
-        body: "url"
+  $(document).ready(function() {
+    $(".gif_box_download").each(function() {
+      $(this).click(function() {
+        var image_url = ($(this).attr("src"));
+        callDeviceMethod({
+          method: "download.image",
+          body: image_url
+        });
       });
-    }
+    });
 
     callDeviceMethod = function(json) {
-      Device.call(JSON.stringify(json));
+      try {
+        Device.call(JSON.stringify(json));
+      } catch (e) {
+        console.log("本来であればアプリ内ブラウザでみるもの: " + e);
+      }
     };
-  }
+  });
 }).call(this);

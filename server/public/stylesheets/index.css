@@ -7,7 +7,7 @@
   margin: 0 auto;
 }
 
-#gif_box {
+.gif_box {
   margin: 10px;
   float: left;
   background-color: #fff;
@@ -20,15 +20,15 @@
   margin-top: 16px;
 }
 
-#gif_box_info {
+.gif_box_info {
   background-color: #fff;
 }
 
-#gif_box_icon {
+.gif_box_icon {
   vertical-align: middle;
 }
 
-#gif_image_wrapper {
+.gif_image_wrapper {
   background-color: #000;
   margin-top: 6px;
   padding: 6px;
@@ -37,27 +37,27 @@
   box-shadow: 0 10px 6px -6px #777;
 }
 
-#gif_image {
+.gif_image {
   width: 228px;
   height: 228px;
   margin: 0 auto;
 }
 
-#gif_box_feedback {
+.gif_box_feedback {
   background-color: #fff;
   margin-top: 16px;
 }
 
-#gif_box_comment {
+.gif_box_comment {
   background-color: #fff;
 }
 
-#gif_box_like {
+.gif_box_like {
   background-color: #fff;
   margin-left: 16px;
 }
 
-#gif_box_delete {
+.gif_box_download {
   float: right;
   background-color: #fff;
   margin-left: 16px;

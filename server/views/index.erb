@@ -3,22 +3,23 @@
   <head>
     <meta charset="utf-8">
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="javascripts/index.js"></script>
   </head>
   <body>
     <div id="content">
       <% @gif_image_hash.each do |title, image_url| %>
-        <div id="gif_box">
-          <div id="gif_box_info">
-            <img id="gif_box_icon" src="images/icon.jpeg"><%= title %><br>
+        <div class="gif_box">
+          <div class="gif_box_info">
+            <img class="gif_box_icon" src="images/icon.jpeg"><%= title %><br>
           </div>
-          <div id="gif_image_wrapper">
-            <img id="gif_image" onClick="onImageClick()" src="<%= image_url %>"><br>
+          <div class="gif_image_wrapper">
+            <img class="gif_image" src="<%= image_url %>"><br>
           </div>
-          <div id="gif_box_feedback">
-            <img id="gif_box_comment" src="images/comment.png">
-            <img id="gif_box_like" src="images/like.png">
-            <img id="gif_box_delete" src="images/like.png">
+          <div class="gif_box_feedback">
+            <img class="gif_box_comment" src="images/comment.png">
+            <img class="gif_box_like" src="images/like.png">
+            <img class="gif_box_download" src="images/like.png">
           </div>
         </div>
       <% end %>
