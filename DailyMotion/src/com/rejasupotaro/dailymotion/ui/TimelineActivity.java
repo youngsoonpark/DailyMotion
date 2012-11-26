@@ -1,9 +1,13 @@
 package com.rejasupotaro.dailymotion.ui;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -12,9 +16,13 @@ import android.webkit.WebView.PictureListener;
 import android.webkit.WebViewClient;
 
 import com.rejasupotaro.dailymotion.Constants;
+import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
 
 public class TimelineActivity extends Activity {
+    private static final String TAG = TimelineActivity.class.getSimpleName();
+
+    private JavaScriptInterface mJavaScriptInterface;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,18 @@ public class TimelineActivity extends Activity {
         setupWebViewClient(timelineWebView);
         timelineWebView.clearCache(true);
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
+
+        mJavaScriptInterface = new JavaScriptInterface(this, timelineWebView);
+        mJavaScriptInterface.setOnCallFromBrowser(new JavaScriptInterface.Receiver() {
+            public void receive(JSONObject jsonObject) {
+                try {
+                    String imageUrl = jsonObject.getString("body");
+                    Log.d(TAG, imageUrl);
+                } catch (JSONException e) {
+                    Log.d(TAG, jsonObject.toString(), e);
+                }
+            }
+        });
     }
 
     private void setupWebViewClient(WebView webView) {

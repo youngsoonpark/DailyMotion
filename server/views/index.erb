@@ -1,6 +1,9 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
+    <script src="javascripts/index.js"></script>
   </head>
   <body>
     <div id="content">
@@ -10,11 +13,12 @@
             <img id="gif_box_icon" src="images/icon.jpeg"><%= title %><br>
           </div>
           <div id="gif_image_wrapper">
-            <img id="gif_image" src="<%= image_url %>"><br>
+            <img id="gif_image" onClick="onImageClick()" src="<%= image_url %>"><br>
           </div>
           <div id="gif_box_feedback">
             <img id="gif_box_comment" src="images/comment.png">
             <img id="gif_box_like" src="images/like.png">
+            <img id="gif_box_delete" src="images/like.png">
           </div>
         </div>
       <% end %>
