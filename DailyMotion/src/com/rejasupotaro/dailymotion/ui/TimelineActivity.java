@@ -35,7 +35,7 @@ public class TimelineActivity extends Activity {
         WebView timelineWebView = (WebView) findViewById(R.id.webview_timeline);
         timelineWebView.getSettings().setJavaScriptEnabled(true);
         setupWebViewClient(timelineWebView);
-        timelineWebView.clearCache(true);
+        timelineWebView.clearCache(false);
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
 
         mJavaScriptInterface = new JavaScriptInterface(this, timelineWebView);
