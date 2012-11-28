@@ -18,10 +18,10 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.rejasupotaro.dailymotion.R;
-import com.rejasupotaro.dailymotion.ToastUtils;
+import com.rejasupotaro.dailymotion.api.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
-import com.rejasupotaro.dailymotion.model.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
+import com.rejasupotaro.dailymotion.utils.ToastUtils;
 
 public class AnimationComposeActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
 

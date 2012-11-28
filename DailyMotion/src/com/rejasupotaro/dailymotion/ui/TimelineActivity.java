@@ -19,8 +19,8 @@ import android.webkit.WebViewClient;
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
-import com.rejasupotaro.dailymotion.ToastUtils;
-import com.rejasupotaro.dailymotion.UriUtils;
+import com.rejasupotaro.dailymotion.utils.ToastUtils;
+import com.rejasupotaro.dailymotion.utils.UriUtils;
 
 public class TimelineActivity extends Activity {
     private static final String TAG = TimelineActivity.class.getSimpleName();

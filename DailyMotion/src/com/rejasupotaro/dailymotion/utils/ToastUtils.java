@@ -1,4 +1,7 @@
-package com.rejasupotaro.dailymotion;
+package com.rejasupotaro.dailymotion.utils;
+
+import com.rejasupotaro.dailymotion.R;
+import com.rejasupotaro.dailymotion.R.string;
 
 import android.content.Context;
 import android.widget.Toast;

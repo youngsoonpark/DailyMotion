@@ -1,4 +1,4 @@
-package com.rejasupotaro.dailymotion.model;
+package com.rejasupotaro.dailymotion.api;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,8 +39,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import com.rejasupotaro.dailymotion.CloseableUtils;
 import com.rejasupotaro.dailymotion.Constants;
+import com.rejasupotaro.dailymotion.model.AnimationEntity;
+import com.rejasupotaro.dailymotion.utils.CloseableUtils;
 
 public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
 

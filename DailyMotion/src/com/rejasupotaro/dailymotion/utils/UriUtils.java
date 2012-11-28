@@ -1,4 +1,4 @@
-package com.rejasupotaro.dailymotion;
+package com.rejasupotaro.dailymotion.utils;
 
 import android.net.Uri;
 import android.util.Log;

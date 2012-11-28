@@ -1,4 +1,4 @@
-package com.rejasupotaro.dailymotion;
+package com.rejasupotaro.dailymotion.utils;
 
 import java.io.Closeable;
 import java.io.IOException;

@@ -15,8 +15,8 @@ import android.net.Uri;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 
-import com.rejasupotaro.dailymotion.CloseableUtils;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
+import com.rejasupotaro.dailymotion.utils.CloseableUtils;
 
 public class DailyMotionHelper {
 
