@@ -20,7 +20,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.api.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
-import com.rejasupotaro.dailymotion.ui.helper.DailyMotionHelper;
+import com.rejasupotaro.dailymotion.ui.helper.ActivityHelper;
 import com.rejasupotaro.dailymotion.utils.ToastUtils;
 
 public class AnimationComposeActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
@@ -28,7 +28,7 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
     private static final String TAG = AnimationComposeActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
 
-    private DailyMotionHelper mDailyMotionHelper;
+    private ActivityHelper mActivityHelper;
     private AnimationView mAnimationView;
     private AnimationEntity mAnimationEntity;
     private ProgressDialog mProgressDialog;
@@ -38,13 +38,13 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDailyMotionHelper = new DailyMotionHelper(this);
+        mActivityHelper = new ActivityHelper(this);
 
         mAnimationView = (AnimationView) findViewById(R.id.image_animation_view);
         mAnimationView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mAnimationEntity.size() == 0) {
-                    mDailyMotionHelper.launchGallarey();
+                    mActivityHelper.launchGallarey();
                 }
             }
         });
@@ -60,7 +60,7 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
         Button closeButton = (Button) findViewById(R.id.button_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mDailyMotionHelper.launchActivity(TimelineActivity.class);
+                mActivityHelper.launchActivity(TimelineActivity.class);
             }
         });
 
@@ -73,7 +73,7 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
             }
         });
 
-        mAnimationEntity = mDailyMotionHelper.loadImageFromIntent(getIntent());
+        mAnimationEntity = mActivityHelper.loadImageFromIntent(getIntent());
         if (mAnimationEntity.size() > 0) {
             mAnimationView.setupAnimation(mAnimationEntity.getBitmapList());
         }
@@ -81,8 +81,8 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == DailyMotionHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
-            mAnimationEntity = mDailyMotionHelper.loadImageFromIntent(getIntent());
+        if (requestCode == ActivityHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
+            mAnimationEntity = mActivityHelper.loadImageFromIntent(getIntent());
             if (mAnimationEntity.size() > 0) {
                 mAnimationView.setImageBitmap(mAnimationEntity.getBitmap(0));
             }

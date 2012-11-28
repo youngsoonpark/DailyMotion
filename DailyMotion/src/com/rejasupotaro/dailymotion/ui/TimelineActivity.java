@@ -5,9 +5,11 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -15,22 +17,47 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
+import com.rejasupotaro.dailymotion.ui.helper.ActivityHelper;
 import com.rejasupotaro.dailymotion.utils.ToastUtils;
 import com.rejasupotaro.dailymotion.utils.UriUtils;
 
 public class TimelineActivity extends Activity {
     private static final String TAG = TimelineActivity.class.getSimpleName();
 
+    private ActivityHelper mActivityHelper;
     private JavaScriptInterface mJavaScriptInterface;
+    private JavaScriptInterface.Receiver mJavaScriptInterfaceReceiver = new JavaScriptInterface.Receiver() {
+        public void receive(JSONObject jsonObject) {
+            try {
+                JSONObject body = jsonObject.getJSONObject("body");
+                Log.d(TAG, body.toString());
+                if (body.has("title")) {
+                    String title = body.getString("title");
+                    ToastUtils.show(TimelineActivity.this, title + "にLikeしました");
+                } else if (body.has("image_url")) {
+                    String image_url = body.getString("image_url");
+                    ToastUtils.show(TimelineActivity.this, image_url);
+                } else {
+                    Log.v(TAG, "Received unknown body. Check your code.");
+                }
+            } catch (JSONException e) {
+                Log.d(TAG, jsonObject.toString(), e);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+        mActivityHelper = new ActivityHelper(this);
 
         WebView timelineWebView = (WebView) findViewById(R.id.webview_timeline);
         timelineWebView.getSettings().setJavaScriptEnabled(true);
@@ -39,25 +66,9 @@ public class TimelineActivity extends Activity {
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
 
         mJavaScriptInterface = new JavaScriptInterface(this, timelineWebView);
-        mJavaScriptInterface.setOnCallFromBrowser(new JavaScriptInterface.Receiver() {
-            public void receive(JSONObject jsonObject) {
-                try {
-                    JSONObject body = jsonObject.getJSONObject("body");
-                    Log.d(TAG, body.toString());
-                    if (body.has("title")) {
-                        String title = body.getString("title");
-                        ToastUtils.show(TimelineActivity.this, title + "にLikeしました");
-                    } else if (body.has("image_url")) {
-                        String image_url = body.getString("image_url");
-                        ToastUtils.show(TimelineActivity.this, image_url);
-                    } else {
-                        Log.v(TAG, "Received unknown body. Check your code.");
-                    }
-                } catch (JSONException e) {
-                    Log.d(TAG, jsonObject.toString(), e);
-                }
-            }
-        });
+        mJavaScriptInterface.setOnCallFromBrowser(mJavaScriptInterfaceReceiver);
+
+        mActivityHelper.setupSplashAnimation(new Handler());
     }
 
     private void setupWebViewClient(WebView webView) {
@@ -67,7 +78,7 @@ public class TimelineActivity extends Activity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 Uri uri = Uri.parse(url);
-                if (Constants.PRODUCTION && !UriUtils.compareDomain(uri, Constants.APP_SITE_URL)) {
+                if (Constants.PRODUCTION && !UriUtils.compareDomain(uri, Constants.DOMAIN)) {
                     throw new SecurityException();
                 }
 

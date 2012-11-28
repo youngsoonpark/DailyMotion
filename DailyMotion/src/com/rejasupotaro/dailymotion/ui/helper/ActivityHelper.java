@@ -11,22 +11,28 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.utils.CloseableUtils;
 
-public class DailyMotionHelper {
+public class ActivityHelper {
 
-    private static final String TAG = DailyMotionHelper.class.getSimpleName();
+    private static final String TAG = ActivityHelper.class.getSimpleName();
     private static final String EXTRA_STREAM = "android.intent.extra.STREAM";
     public static final int REQUEST_GALLERY = 0;
 
     private Activity mActivity;
 
-    public DailyMotionHelper(Activity activity) {
+    public ActivityHelper(Activity activity) {
         mActivity = activity;
     }
 
@@ -81,5 +87,48 @@ public class DailyMotionHelper {
         }
 
         return animationImageList;
+    }
+
+    public void setupSplashAnimation(final Handler handler) {
+        new Thread(new Runnable() {
+
+            private static final int START_ANIMATION = 1000;
+            private static final int RUN_INTERVAL = 50;
+            private int tick = 0;
+            private int transparent = 255;
+            private View splashView = mActivity.findViewById(R.id.view_splash);
+            private ImageView splashImageView = (ImageView) mActivity.findViewById(R.id.view_splash_image);
+            private TextView splashTextView = (TextView) mActivity.findViewById(R.id.view_splash_text);
+
+            public void run() {
+                while (transparent >= 0) {
+                    try {
+                        Thread.sleep(RUN_INTERVAL);
+                    } catch (InterruptedException e) {
+                        Log.v(TAG, "Something wrong with TimelineActivity", e);
+                    }
+
+                    if (tick >= START_ANIMATION) {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                transparent -= 20;
+
+                                splashView.setBackgroundColor(Color.argb(transparent, 255, 255, 255));
+                                splashImageView.setAlpha(transparent);
+                                splashTextView.setTextColor(Color.argb(transparent, 120, 120, 120));
+
+                                if (transparent <= 0) {
+                                    splashView.setVisibility(View.GONE);
+                                    splashImageView.setVisibility(View.GONE);
+                                    splashTextView.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    }
+
+                    tick += RUN_INTERVAL;
+                }
+            }
+        }).start();
     }
 }

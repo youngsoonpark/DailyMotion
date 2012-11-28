@@ -34,7 +34,7 @@ public class AnimationView extends ImageView {
 
         mThread = new Thread(new Runnable() {
             public void run() {
-                while(true){
+                while (true) {
                     try {
                         Thread.sleep(mAnimationInterval);
                     }catch(InterruptedException e){
