@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.ToastUtils;
+import com.rejasupotaro.dailymotion.UriUtils;
 
 public class TimelineActivity extends Activity {
     private static final String TAG = TimelineActivity.class.getSimpleName();
@@ -64,6 +66,11 @@ public class TimelineActivity extends Activity {
         webView.setWebViewClient(new WebViewClient(){
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                Uri uri = Uri.parse(url);
+                if (Constants.PRODUCTION && !UriUtils.compareDomain(uri, Constants.APP_SITE_URL)) {
+                    throw new SecurityException();
+                }
+
                 super.onPageStarted(view, url, favicon);
                 showLoadingProgress();
             }
