@@ -18,6 +18,7 @@ import android.webkit.WebViewClient;
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
+import com.rejasupotaro.dailymotion.ToastUtils;
 
 public class TimelineActivity extends Activity {
     private static final String TAG = TimelineActivity.class.getSimpleName();
@@ -39,8 +40,17 @@ public class TimelineActivity extends Activity {
         mJavaScriptInterface.setOnCallFromBrowser(new JavaScriptInterface.Receiver() {
             public void receive(JSONObject jsonObject) {
                 try {
-                    String imageUrl = jsonObject.getString("body");
-                    Log.d(TAG, imageUrl);
+                    JSONObject body = jsonObject.getJSONObject("body");
+                    Log.d(TAG, body.toString());
+                    if (body.has("title")) {
+                        String title = body.getString("title");
+                        ToastUtils.show(TimelineActivity.this, title + "にLikeしました");
+                    } else if (body.has("image_url")) {
+                        String image_url = body.getString("image_url");
+                        ToastUtils.show(TimelineActivity.this, image_url);
+                    } else {
+                        Log.v(TAG, "Received unknown body. Check your code.");
+                    }
                 } catch (JSONException e) {
                     Log.d(TAG, jsonObject.toString(), e);
                 }
