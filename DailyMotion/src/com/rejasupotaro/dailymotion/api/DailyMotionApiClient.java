@@ -143,7 +143,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
         return mResponseMessage;
     }
 
-    private StatusLine getResponseStatusLine(HttpClient httpClient,
+    public StatusLine getResponseStatusLine(HttpClient httpClient,
             HttpRequestBase method)
                     throws ClientProtocolException, IOException {
         HttpResponse response = null;
