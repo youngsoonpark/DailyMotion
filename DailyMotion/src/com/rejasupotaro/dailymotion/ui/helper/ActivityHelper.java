@@ -92,7 +92,7 @@ public class ActivityHelper {
     public void setupSplashAnimation(final Handler handler) {
         new Thread(new Runnable() {
 
-            private static final int START_ANIMATION = 1000;
+            private static final int START_ANIMATION = 2000;
             private static final int RUN_INTERVAL = 50;
             private int tick = 0;
             private int transparent = 255;

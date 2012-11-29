@@ -36,8 +36,7 @@
             <ImageView
                 android:id="@+id/view_splash_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
                 android:src="@drawable/splash_image" />
 
             <TextView

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 import android.webkit.WebViewClient;
@@ -62,13 +63,19 @@ public class TimelineActivity extends Activity {
         WebView timelineWebView = (WebView) findViewById(R.id.webview_timeline);
         timelineWebView.getSettings().setJavaScriptEnabled(true);
         setupWebViewClient(timelineWebView);
-        timelineWebView.clearCache(false);
+        setupWebViewCache(timelineWebView);
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
 
         mJavaScriptInterface = new JavaScriptInterface(this, timelineWebView);
         mJavaScriptInterface.setOnCallFromBrowser(mJavaScriptInterfaceReceiver);
 
         mActivityHelper.setupSplashAnimation(new Handler());
+    }
+    
+    private void setupWebViewCache(WebView webView) {
+        //webView.clearCache(boolean); true => delete RAM and DB, false => delete RAM
+        webView.getSettings().setAppCacheEnabled(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
     }
 
     private void setupWebViewClient(WebView webView) {

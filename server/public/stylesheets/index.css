@@ -37,10 +37,20 @@
   box-shadow: 0 10px 6px -6px #777;
 }
 
-.gif_image {
-  width: 228px;
-  height: 228px;
-  margin: 0 auto;
+@media only screen and (max-device-width : 1800px) {
+  .gif_image {
+    width: 268px;
+    height: 268px;
+    margin: 0 auto;
+  }
+}
+
+@media only screen and (max-device-width : 320px) {
+  .gif_image {
+    width: 228px;
+    height: 228px;
+    margin: 0 auto;
+  }
 }
 
 .gif_box_feedback {
