@@ -111,7 +111,7 @@ public class ActivityHelper {
                     if (tick >= START_ANIMATION) {
                         handler.post(new Runnable() {
                             public void run() {
-                                transparent -= 20;
+                                transparent -= 18;
 
                                 splashView.setBackgroundColor(Color.argb(transparent, 255, 255, 255));
                                 splashImageView.setAlpha(transparent);

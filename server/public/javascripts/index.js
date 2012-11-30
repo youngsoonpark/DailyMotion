@@ -35,7 +35,7 @@
       });
     });
 
-  callDeviceMethod = function(json) {
+  var callDeviceMethod = function(json) {
     try {
       Device.call(JSON.stringify(json));
     } catch (e) {

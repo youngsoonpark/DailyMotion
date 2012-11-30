@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,8 +17,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
@@ -66,8 +63,7 @@ public class TimelineActivity extends Activity {
         setupWebViewCache(timelineWebView);
         timelineWebView.loadUrl(Constants.APP_SITE_URL);
 
-        mJavaScriptInterface = new JavaScriptInterface(this, timelineWebView);
-        mJavaScriptInterface.setOnCallFromBrowser(mJavaScriptInterfaceReceiver);
+        mJavaScriptInterface = new JavaScriptInterface(timelineWebView, mJavaScriptInterfaceReceiver);
 
         mActivityHelper.setupSplashAnimation(new Handler());
     }
