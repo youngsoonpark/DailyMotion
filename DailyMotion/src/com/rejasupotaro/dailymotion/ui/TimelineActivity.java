@@ -3,7 +3,9 @@ package com.rejasupotaro.dailymotion.ui;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
 import android.net.Uri;
@@ -17,19 +19,31 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
+import com.google.inject.Inject;
 import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.JavaScriptInterface;
 import com.rejasupotaro.dailymotion.R;
-import com.rejasupotaro.dailymotion.ui.helper.ActivityHelper;
+import com.rejasupotaro.dailymotion.ui.helper.DailyMotionActivityHelper;
 import com.rejasupotaro.dailymotion.utils.ToastUtils;
 import com.rejasupotaro.dailymotion.utils.UriUtils;
 
-public class TimelineActivity extends Activity {
+@ContentView(R.layout.activity_timeline)
+public class TimelineActivity extends RoboActivity {
     private static final String TAG = TimelineActivity.class.getSimpleName();
 
-    private ActivityHelper mActivityHelper;
+    @InjectView(R.id.webview_timeline)
+    private WebView mWebView;
+
+    @InjectView(R.id.progress_loading)
+    private ProgressBar mProgressLoading;
+
+    @Inject
+    private DailyMotionActivityHelper mActivityHelper;
+
     private JavaScriptInterface mJavaScriptInterface;
+
     private JavaScriptInterface.Receiver mJavaScriptInterfaceReceiver = new JavaScriptInterface.Receiver() {
         public void receive(JSONObject jsonObject) {
             try {
@@ -53,21 +67,17 @@ public class TimelineActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
 
-        mActivityHelper = new ActivityHelper(this);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        setupWebViewClient(mWebView);
+        setupWebViewCache(mWebView);
+        mWebView.loadUrl(Constants.APP_SITE_URL);
 
-        WebView timelineWebView = (WebView) findViewById(R.id.webview_timeline);
-        timelineWebView.getSettings().setJavaScriptEnabled(true);
-        setupWebViewClient(timelineWebView);
-        setupWebViewCache(timelineWebView);
-        timelineWebView.loadUrl(Constants.APP_SITE_URL);
-
-        mJavaScriptInterface = new JavaScriptInterface(timelineWebView, mJavaScriptInterfaceReceiver);
+        mJavaScriptInterface = new JavaScriptInterface(mWebView, mJavaScriptInterfaceReceiver);
 
         mActivityHelper.setupSplashAnimation(new Handler());
     }
-    
+
     private void setupWebViewCache(WebView webView) {
         //webView.clearCache(boolean); true => delete RAM and DB, false => delete RAM
         webView.getSettings().setAppCacheEnabled(true);
@@ -109,13 +119,13 @@ public class TimelineActivity extends Activity {
     }
 
     private void showLoadingProgress() {
-        findViewById(R.id.progress_loading).setVisibility(View.VISIBLE);
-        findViewById(R.id.webview_timeline).setVisibility(View.GONE);
+        mProgressLoading.setVisibility(View.VISIBLE);
+        mWebView.setVisibility(View.GONE);
     }
 
     private void hideLoadingProgress() {
-        findViewById(R.id.progress_loading).setVisibility(View.GONE);
-        findViewById(R.id.webview_timeline).setVisibility(View.VISIBLE);
+        mProgressLoading.setVisibility(View.GONE);
+        mWebView.setVisibility(View.VISIBLE);
     }
 
     @Override

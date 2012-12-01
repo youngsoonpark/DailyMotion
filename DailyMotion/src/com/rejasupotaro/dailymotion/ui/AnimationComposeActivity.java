@@ -3,10 +3,12 @@ package com.rejasupotaro.dailymotion.ui;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 
+import roboguice.activity.RoboFragmentActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -17,30 +19,44 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+import com.google.inject.Inject;
 import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.api.DailyMotionApiClient;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
-import com.rejasupotaro.dailymotion.ui.helper.ActivityHelper;
+import com.rejasupotaro.dailymotion.ui.helper.DailyMotionActivityHelper;
 import com.rejasupotaro.dailymotion.utils.ToastUtils;
 
-public class AnimationComposeActivity extends FragmentActivity implements LoaderCallbacks<StatusLine> {
+@ContentView(R.layout.activity_main)
+public class AnimationComposeActivity extends RoboFragmentActivity implements LoaderCallbacks<StatusLine> {
 
     private static final String TAG = AnimationComposeActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
 
-    private ActivityHelper mActivityHelper;
+    @InjectView(R.id.image_animation_view)
     private AnimationView mAnimationView;
+
+    @InjectView(R.id.button_post)
+    private Button mPostButton;
+
+    @InjectView(R.id.button_close)
+    private Button mCloseButton;
+
+    @InjectView(R.id.seekbar_animation_speed)
+    private SeekBar mAnimationSpeedSeekBar;
+
+    @InjectView(R.id.edit_text_image_title)
+    private EditText mImageTitleEditText;
+
+    @Inject
+    private DailyMotionActivityHelper mActivityHelper;
+
     private AnimationEntity mAnimationEntity;
     private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        mActivityHelper = new ActivityHelper(this);
-
-        mAnimationView = (AnimationView) findViewById(R.id.image_animation_view);
         mAnimationView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mAnimationEntity.size() == 0) {
@@ -49,23 +65,20 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
             }
         });
 
-        Button postButton = (Button) findViewById(R.id.button_post);
-        postButton.setOnClickListener(new View.OnClickListener() {
+        mPostButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 getSupportLoaderManager().initLoader(
                         REQUEST_UPLOAD, null, AnimationComposeActivity.this);
             }
         });
 
-        Button closeButton = (Button) findViewById(R.id.button_close);
-        closeButton.setOnClickListener(new View.OnClickListener() {
+        mCloseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mActivityHelper.launchActivity(TimelineActivity.class);
             }
         });
 
-        SeekBar animationSpeedSeekBar = (SeekBar) findViewById(R.id.seekbar_animation_speed);
-        animationSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        mAnimationSpeedSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {}
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -81,7 +94,7 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == ActivityHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
+        if (requestCode == DailyMotionActivityHelper.REQUEST_GALLERY && resultCode == RESULT_OK) {
             mAnimationEntity = mActivityHelper.loadImageFromIntent(getIntent());
             if (mAnimationEntity.size() > 0) {
                 mAnimationView.setImageBitmap(mAnimationEntity.getBitmap(0));
@@ -102,7 +115,7 @@ public class AnimationComposeActivity extends FragmentActivity implements Loader
             mProgressDialog.setMessage(getString(R.string.progress_uploading));
             mProgressDialog.show();
 
-            mAnimationEntity.setTitle(((EditText) findViewById(R.id.edit_text_image_title)).getText().toString());
+            mAnimationEntity.setTitle(mImageTitleEditText.getText().toString());
             mAnimationEntity.setDelay(mAnimationView.getDelay());
             return new DailyMotionApiClient(this, mAnimationEntity);
         default:
