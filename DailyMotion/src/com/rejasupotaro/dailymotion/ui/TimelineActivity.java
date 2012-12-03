@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -131,6 +133,17 @@ public class TimelineActivity extends RoboActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu){
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.menu_reload).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                mWebView.reload();
+                return false;
+            }
+        });
         return true;
     }
 }

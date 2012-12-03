@@ -13,6 +13,8 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,12 +104,6 @@ public class AnimationComposeActivity extends RoboFragmentActivity implements Lo
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
-
     public Loader<StatusLine> onCreateLoader(int id, Bundle args) {
         switch (id) {
         case REQUEST_UPLOAD:
@@ -139,5 +135,12 @@ public class AnimationComposeActivity extends RoboFragmentActivity implements Lo
         } else {
             ToastUtils.show(this, R.string.upload_failed);
         }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
     }
 }
