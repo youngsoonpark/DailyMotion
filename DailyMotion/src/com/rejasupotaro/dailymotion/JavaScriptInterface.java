@@ -33,6 +33,18 @@ public class JavaScriptInterface {
 
     public void callBrowserMethod(String jsMethodName) {
         mWebView.loadUrl("javascript:" + jsMethodName + "()");
+
+    }
+
+    public void callBrowserMethod(String jsMethodName, String... args) {
+        String jsArgs = "";
+        for (int i = 0; i < args.length; i++) {
+            jsArgs += args[i];
+            if (i != args.length - 1) {
+                jsArgs += ",";
+            }
+        }
+        mWebView.loadUrl("javascript:" + jsMethodName + "(" + jsArgs + ")");
     }
 
     public interface Receiver {
