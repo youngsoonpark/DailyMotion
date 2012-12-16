@@ -13,8 +13,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -136,7 +134,6 @@ public class AnimationComposeActivity extends RoboFragmentActivity implements Lo
             ToastUtils.show(this, R.string.upload_failed);
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
