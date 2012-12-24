@@ -74,7 +74,6 @@
     }
 
     var onReceiveImageJson = function(jsonArray) {
-      console.log(jsonArray.length);
       for (var i = 0; i < jsonArray.length; i++) {
         var elem = createGifElement(jsonArray[i]);
         $("#content").append(elem);
