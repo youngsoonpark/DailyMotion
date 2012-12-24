@@ -62,5 +62,13 @@ class ImageStore
     p insert_query
     @client.query(insert_query)
   end
+
+  def like(id)
+    update_query = <<-SQL
+      UPDATE gif_images SET like_count=like_count+1 WHERE id=#{id}
+    SQL
+    p update_query
+    @client.query(update_query)
+  end
 end
 

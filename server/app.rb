@@ -10,8 +10,11 @@ set :public_folder, File.dirname(__FILE__) + '/public'
 image_store = ImageStore.new
 
 get '/' do
-  @gif_image_hash = image_store.get_image_hash()
   erb :index
+end
+
+post '/api/like' do
+  image_store.like(params[:id])
 end
 
 get '/api/get/images' do
