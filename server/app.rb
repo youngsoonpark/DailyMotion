@@ -1,16 +1,21 @@
 require 'rubygems'
 require 'sinatra'
+require 'json'
 require 'zipruby'
 require File.dirname(__FILE__) + '/db/image_store'
 
 set :port, 3000
 set :public_folder, File.dirname(__FILE__) + '/public'
 
-get '/' do
-  image_store = ImageStore.new
-  @gif_image_hash = image_store.get_image_hash()
+image_store = ImageStore.new
 
+get '/' do
+  @gif_image_hash = image_store.get_image_hash()
   erb :index
+end
+
+get '/api/get/images' do
+  image_store.get_image_json()
 end
 
 post '/api/convert' do
