@@ -7,17 +7,18 @@ require File.dirname(__FILE__) + '/db/image_store'
 set :port, 3000
 set :public_folder, File.dirname(__FILE__) + '/public'
 
-image_store = ImageStore.new
 
 get '/' do
   erb :index
 end
 
 post '/api/like' do
+  image_store = ImageStore.new
   image_store.like(params[:id])
 end
 
 get '/api/get/images' do
+  image_store = ImageStore.new
   image_store.get_image_json()
 end
 
