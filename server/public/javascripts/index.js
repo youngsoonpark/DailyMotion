@@ -13,12 +13,11 @@
     */
 
     var PageManager = (function() {
-      var MAX_SHOWABLE_IMAGE_NUM = 12;
+      var MAX_SHOWABLE_IMAGE_NUM = 8;
 
-      function PageManager(json) {
+      var PageManager = function(json) {
         this.imageJsonArray = json;
         this.currentPage = 1;
-
         init(this.imageJsonArray);
       }
 
@@ -52,12 +51,11 @@
 
         var createGifBoxFeedback = function(id, title, imageUrl, likeCount) {
           var gifBoxFeedback = $('<div class="gif_box_feedback">');
-
           gifBoxFeedback.append('<img class="gif_box_comment" src="images/comment.png">');
 
-          var likeButton = likeCount > 0
-            ? $('<img class="gif_box_like" src="images/like_on.png">')
-            : $('<img class="gif_box_like" src="images/like.png">');
+          var likeButton = likeCount > 0 ?
+            $('<img class="gif_box_like" src="images/like_on.png">') :
+            $('<img class="gif_box_like" src="images/like.png">');
           likeButton.click(function() {
             $.ajax({
               type: "POST",
@@ -91,6 +89,20 @@
         return gifBox;
       }
 
+      PageManager.prototype.setOnPageChangedCallback = function(callback) {
+        this.pageChangedCallback = callback;
+      }
+
+      PageManager.prototype.getCurrentPage = function() {
+        return this.currentPage;
+      }
+
+      PageManager.prototype.getLastPage = function() {
+        return gifElementArray == null ?
+          1 :
+          gifElementArray.length / MAX_SHOWABLE_IMAGE_NUM;
+      }
+
       PageManager.prototype.show = function(page) {
         if (page == parseInt(page)) {
           this.currentPage = page;
@@ -98,6 +110,10 @@
           var offset = (page - 1) * MAX_SHOWABLE_IMAGE_NUM;
           for (var i = offset; i < offset + MAX_SHOWABLE_IMAGE_NUM; i++) {
             $("#content").append(gifElementArray[i]);
+          }
+
+          if (this.pageChangedCallback != null) {
+            this.pageChangedCallback();
           }
         } else if (typeof page.valueOf() == "string"){
           if (page == "prev" && this.currentPage > 1) {
@@ -115,13 +131,22 @@
     var pageManager = {};
     var onReceiveImageJson = function(jsonArray) {
       pageManager = new PageManager(jsonArray);
+      pageManager.setOnPageChangedCallback(function() {
+        window.scrollTo(0, 0);
+        $("#pager_navi").html(
+          "(" +
+          pageManager.getCurrentPage() +
+          "/" + 
+          pageManager.getLastPage() +
+          ")");
+      });
       pageManager.show(1);
     }
 
-    $("#button_page_prev").click(function() {
+    $("#pager_button_prev").click(function() {
       pageManager.show("prev");
     });
-    $("#button_page_next").click(function() {
+    $("#pager_button_next").click(function() {
       pageManager.show("next");
     });
 
@@ -137,13 +162,13 @@
       }
     });
 
-  var callDeviceMethod = function(json) {
-    try {
-      Device.call(JSON.stringify(json));
-    } catch (e) {
-      console.log("本来であればアプリ内ブラウザでみるもの: " + e);
+    var callDeviceMethod = function(json) {
+      try {
+        Device.call(JSON.stringify(json));
+      } catch (e) {
+        console.log("本来であればアプリ内ブラウザでみるもの: " + e);
+      }
     }
-  }
 
   });
 }).call(this);

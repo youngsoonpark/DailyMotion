@@ -73,13 +73,13 @@ body {
   margin-left: 16px;
 }
 
-#button_page {
+#pager {
   padding: 20px;
   text-align: center;
   clear: both;
 }
 
-#button_page_prev, #button_page_next {
+#pager_button_prev, #pager_button_next {
   background-color: white;
   color: #666;
   font-size: 16px;
@@ -89,3 +89,4 @@ body {
   -webkit-box-shadow: 1px 1px 2px #E7E7E7;
   -moz-box-shadow: 1px 1px 2px #E7E7E7;
 }
+
