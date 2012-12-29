@@ -100,7 +100,7 @@
       PageManager.prototype.getLastPage = function() {
         return gifElementArray == null ?
           1 :
-          gifElementArray.length / MAX_SHOWABLE_IMAGE_NUM;
+          Math.ceil(gifElementArray.length / MAX_SHOWABLE_IMAGE_NUM);
       }
 
       PageManager.prototype.show = function(page) {
