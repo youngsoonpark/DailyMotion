@@ -12,73 +12,118 @@
     alert(process);
     */
 
-    var createGifElement = function(json) {
-      var gifBox = $('<div class="gif_box">');
+    var PageManager = (function() {
+      var MAX_SHOWABLE_IMAGE_NUM = 12;
 
-      var createGifBoxHeader = function(title) {
-        var gifBoxHeader = $('<div class="gif_box_info">');
-        gifBoxHeader.append(
-          '<img class="gif_box_icon" src="images/icon.jpeg">'
-          + title
-          + '<br>'
-        );
-        return gifBoxHeader;
+      function PageManager(json) {
+        this.imageJsonArray = json;
+        this.currentPage = 1;
+
+        init(this.imageJsonArray);
       }
 
-      var createGifImage = function(imageUrl) {
-        var gifImageWrapper = $('<div class="gif_image_wrapper">');
-        var gifImage = '<img class="gif_image" src="' + json["image_url"] + '"><br>'
-        gifImageWrapper.append(gifImage);
-        return gifImageWrapper;
+      var init = function(jsonArray) {
+        this.gifElementArray = [];
+        for (var i = 0; i < jsonArray.length; i++) {
+          var elem = createGifElement(jsonArray[i]);
+          gifElementArray.push(elem);
+        }
       }
 
-      var createGifBoxFeedback = function(id, title, imageUrl, likeCount) {
-        var gifBoxFeedback = $('<div class="gif_box_feedback">');
+      var createGifElement = function(json) {
+        var gifBox = $('<div class="gif_box">');
 
-        gifBoxFeedback.append('<img class="gif_box_comment" src="images/comment.png">');
+        var createGifBoxHeader = function(title) {
+          var gifBoxHeader = $('<div class="gif_box_info">');
+          gifBoxHeader.append(
+            '<img class="gif_box_icon" src="images/icon.jpeg">'
+            + title
+            + '<br>'
+          );
+          return gifBoxHeader;
+        }
 
-        var likeButton = likeCount > 0
-          ? $('<img class="gif_box_like" src="images/like_on.png">')
-          : $('<img class="gif_box_like" src="images/like.png">');
-        likeButton.click(function() {
-          $.ajax({
-            type: "POST",
-            url: "/api/like",
-            data: {id: id}
+        var createGifImage = function(imageUrl) {
+          var gifImageWrapper = $('<div class="gif_image_wrapper">');
+          var gifImage = '<img class="gif_image" src="' + json["image_url"] + '"><br>'
+          gifImageWrapper.append(gifImage);
+          return gifImageWrapper;
+        }
+
+        var createGifBoxFeedback = function(id, title, imageUrl, likeCount) {
+          var gifBoxFeedback = $('<div class="gif_box_feedback">');
+
+          gifBoxFeedback.append('<img class="gif_box_comment" src="images/comment.png">');
+
+          var likeButton = likeCount > 0
+            ? $('<img class="gif_box_like" src="images/like_on.png">')
+            : $('<img class="gif_box_like" src="images/like.png">');
+          likeButton.click(function() {
+            $.ajax({
+              type: "POST",
+              url: "/api/like",
+              data: {id: id}
+            });
+
+            likeButton.attr("src", "images/like_on.png");
+            callDeviceMethod({
+              method: "feedback.like",
+              body: { title: title }
+            });
           });
+          gifBoxFeedback.append(likeButton);
 
-          likeButton.attr("src", "images/like_on.png");
-          callDeviceMethod({
-            method: "feedback.like",
-            body: { title: title }
+          var downloadButton = $('<img class="gif_box_download" src="images/download.png">');
+          downloadButton.click(function() {
+            callDeviceMethod({
+              method: "download.image",
+              body: { image_url: imageUrl }
+            });
           });
-        });
-        gifBoxFeedback.append(likeButton);
+          gifBoxFeedback.append(downloadButton);
 
-        var downloadButton = $('<img class="gif_box_download" src="images/download.png">');
-        downloadButton.click(function() {
-          callDeviceMethod({
-            method: "download.image",
-            body: { image_url: imageUrl }
-          });
-        });
-        gifBoxFeedback.append(downloadButton);
+          return gifBoxFeedback;
+        }
 
-        return gifBoxFeedback;
+        gifBox.append(createGifBoxHeader(json["title"]));
+        gifBox.append(createGifImage(json["image_url"]));
+        gifBox.append(createGifBoxFeedback(json["id"], json["title"], json["image_url"], json["like_count"]));
+        return gifBox;
       }
 
-      gifBox.append(createGifBoxHeader(json["title"]));
-      gifBox.append(createGifImage(json["image_url"]));
-      gifBox.append(createGifBoxFeedback(json["id"], json["title"], json["image_url"], json["like_count"]));
-      return gifBox;
-    }
+      PageManager.prototype.show = function(page) {
+        if (page == parseInt(page)) {
+          this.currentPage = page;
+          $("#content").empty();
+          var offset = (page - 1) * MAX_SHOWABLE_IMAGE_NUM;
+          for (var i = offset; i < offset + MAX_SHOWABLE_IMAGE_NUM; i++) {
+            $("#content").append(gifElementArray[i]);
+          }
+        } else if (typeof page.valueOf() == "string"){
+          if (page == "prev" && this.currentPage > 1) {
+            this.show(this.currentPage - 1);
+          } else if (page == "next" &&
+              gifElementArray[this.currentPage * MAX_SHOWABLE_IMAGE_NUM]) {
+            this.show(this.currentPage + 1);
+          }
+        }
+      }
 
+      return PageManager;
+    })();
+
+    var pageManager = {};
     var onReceiveImageJson = function(jsonArray) {
-      for (var i = 0; i < jsonArray.length; i++) {
-        var elem = createGifElement(jsonArray[i]);
-        $("#content").append(elem);
-      }
+      pageManager = new PageManager(jsonArray);
+      pageManager.show(1);
     }
+
+    $("#button_page_prev").click(function() {
+      pageManager.show("prev");
+    });
+    $("#button_page_next").click(function() {
+      pageManager.show("next");
+    });
 
     $.ajax({
       type: "GET",
@@ -98,6 +143,7 @@
     } catch (e) {
       console.log("本来であればアプリ内ブラウザでみるもの: " + e);
     }
-  };
+  }
+
   });
 }).call(this);
