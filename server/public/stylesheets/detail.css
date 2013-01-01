@@ -1,0 +1,74 @@
+body {
+  color: #666;
+  background-color: #eee;
+}
+
+#content {
+  margin: 0 auto;
+}
+
+.gif_box {
+  margin: 10px;
+  position: absolute;  
+  left: 50%;  
+  width: 1000px;
+  margin-left: -240px;
+  width: 480px;
+  text-align: center;
+  background-color: #fff;
+  -webkit-border-radius: 16px;
+  -moz-border-radius: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 16px;
+}
+
+.gif_box_info {
+  float: left;
+  background-color: #fff;
+}
+
+.gif_box_icon {
+  vertical-align: middle;
+}
+
+.gif_image_wrapper {
+  background-color: #000;
+  margin-top: 6px;
+  padding: 6px;
+  clear: both;
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+}
+
+.gif_image {
+  width: 470px;
+  height: 470px;
+  margin: 0 auto;
+}
+
+.gif_box_feedback {
+  background-color: #fff;
+  margin-top: 16px;
+}
+
+.gif_box_comment {
+  float: left;
+  background-color: #fff;
+}
+
+.gif_box_like {
+  float: left;
+  background-color: #fff;
+  margin-left: 16px;
+}
+
+.gif_box_download {
+  float: right;
+  background-color: #fff;
+  margin-left: 16px;
+}
+

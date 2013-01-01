@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <title>日常のワンシーンをGIFアニメにする - Dailymotion</title>
+    <meta name="viewport" content="width=device-width;">
+    <link href="/stylesheets/detail.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="/javascripts/detail.js"></script>
+  </head>
+  <body>
+    <div id="content">
+      <div class="gif_box">
+        <div class="gif_box_info">
+          <img class="gif_box_icon" src="/images/icon.jpeg">テスト<br>
+        </div>
+        <div class="gif_image_wrapper">
+          <img class="gif_image" src="<%= @image_hash["image_url"] %>"><br>
+        </div>
+        <div class="gif_box_feedback">
+          <img class="gif_box_comment" src="/images/comment.png">
+          <img class="gif_box_like" src="/images/like.png">
+          <img class="gif_box_download" src="/images/download.png">
+        </div>
+      </div>
+    </div><br>
+  </body>
+</html>
+

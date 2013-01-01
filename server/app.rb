@@ -12,14 +12,25 @@ get '/' do
   erb :index
 end
 
+get '/detail/:id' do
+  image_store = ImageStore.new
+  @image_hash = image_store.get_image_hash(params[:id])
+  erb :detail
+end
+
 post '/api/like' do
   image_store = ImageStore.new
   image_store.like(params[:id])
 end
 
+get '/api/get/image' do
+  image_store = ImageStore.new
+  image_store.get_image_json(params[:id])
+end
+
 get '/api/get/images' do
   image_store = ImageStore.new
-  image_store.get_image_json()
+  image_store.get_all_image_json()
 end
 
 post '/api/convert' do

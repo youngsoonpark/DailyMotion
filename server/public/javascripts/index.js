@@ -35,7 +35,7 @@
         var createGifBoxHeader = function(title) {
           var gifBoxHeader = $('<div class="gif_box_info">');
           gifBoxHeader.append(
-            '<img class="gif_box_icon" src="images/icon.jpeg">'
+            '<img class="gif_box_icon" src="/images/icon.jpeg">'
             + title
             + '<br>'
           );
@@ -51,11 +51,11 @@
 
         var createGifBoxFeedback = function(id, title, imageUrl, likeCount) {
           var gifBoxFeedback = $('<div class="gif_box_feedback">');
-          gifBoxFeedback.append('<img class="gif_box_comment" src="images/comment.png">');
+          gifBoxFeedback.append('<img class="gif_box_comment" src="/images/comment.png">');
 
           var likeButton = likeCount > 0 ?
-            $('<img class="gif_box_like" src="images/like_on.png">') :
-            $('<img class="gif_box_like" src="images/like.png">');
+            $('<img class="gif_box_like" src="/images/like_on.png">') :
+            $('<img class="gif_box_like" src="/images/like.png">');
           likeButton.click(function() {
             $.ajax({
               type: "POST",
@@ -63,7 +63,7 @@
               data: {id: id}
             });
 
-            likeButton.attr("src", "images/like_on.png");
+            likeButton.attr("src", "/images/like_on.png");
             callDeviceMethod({
               method: "feedback.like",
               body: { title: title }
@@ -71,7 +71,7 @@
           });
           gifBoxFeedback.append(likeButton);
 
-          var downloadButton = $('<img class="gif_box_download" src="images/download.png">');
+          var downloadButton = $('<img class="gif_box_download" src="/images/download.png">');
           downloadButton.click(function() {
             callDeviceMethod({
               method: "download.image",
