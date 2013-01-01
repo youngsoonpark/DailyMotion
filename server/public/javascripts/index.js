@@ -42,8 +42,12 @@
           return gifBoxHeader;
         }
 
-        var createGifImage = function(imageUrl) {
+        var createGifImage = function(id, imageUrl) {
           var gifImageWrapper = $('<div class="gif_image_wrapper">');
+          gifImageWrapper.click(function() {
+            document.location = "/detail/" + id;
+          });
+
           var gifImage = '<img class="gif_image" src="' + json["image_url"] + '"><br>'
           gifImageWrapper.append(gifImage);
           return gifImageWrapper;
@@ -84,7 +88,7 @@
         }
 
         gifBox.append(createGifBoxHeader(json["title"]));
-        gifBox.append(createGifImage(json["image_url"]));
+        gifBox.append(createGifImage(json["id"], json["image_url"]));
         gifBox.append(createGifBoxFeedback(json["id"], json["title"], json["image_url"], json["like_count"]));
         return gifBox;
       }
