@@ -59,7 +59,7 @@ public class DailyMotionActivityHelper extends AbstractActivityHelper {
                 for (Uri imageUri: imageUriList) {
                     try {
                         Bitmap bitmap = Media.getBitmap(contentResolver, imageUri);
-                        animationImageList.add(imageUri, ImageUtils.resize(bitmap, DEFAULT_MAX_IMAGE_SIZE));
+                        animationImageList.add(imageUri, bitmap);
                     } catch (FileNotFoundException e) {
                         Log.v(TAG, "Content resolve filed", e);
                     } catch (IOException e) {
@@ -73,7 +73,7 @@ public class DailyMotionActivityHelper extends AbstractActivityHelper {
                 Uri imageUri = intent.getData();
                 if (imageUri == null) return animationImageList;
                 inputStream = contentResolver.openInputStream(imageUri);
-                animationImageList.add(imageUri, ImageUtils.resize(BitmapFactory.decodeStream(inputStream), DEFAULT_MAX_IMAGE_SIZE));
+                animationImageList.add(imageUri, BitmapFactory.decodeStream(inputStream));
             } catch (IOException e) {
                 Log.e(TAG, "Decode failed", e);
             } finally {
