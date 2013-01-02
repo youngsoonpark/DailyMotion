@@ -1,7 +1,6 @@
 package com.rejasupotaro.dailymotion.utils;
 
 import android.net.Uri;
-import android.util.Log;
 
 public final class UriUtils {
     private UriUtils() {}
@@ -12,7 +11,6 @@ public final class UriUtils {
         }
 
         String host = uri.getHost();
-        Log.d("DEBUG", host + " : " + domain);
         int d = host.length() - domain.length();
         if (d < 0) {
             return false;

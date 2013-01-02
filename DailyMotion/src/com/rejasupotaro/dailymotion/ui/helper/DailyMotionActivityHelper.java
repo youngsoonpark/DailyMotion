@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.rejasupotaro.dailymotion.R;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.utils.CloseableUtils;
-import com.rejasupotaro.dailymotion.utils.ImageUtils;
 
 public class DailyMotionActivityHelper extends AbstractActivityHelper {
 
