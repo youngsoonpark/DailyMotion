@@ -22,7 +22,7 @@
         </div>
         <div class="gif_box_feedback">
           <img class="gif_box_comment" src="/images/comment.png">
-          <img class="gif_box_like" src="/images/like.png">
+          <img class="gif_box_like" src="/images/like<% if @image_hash["like_count"] > 0 then print '_on' end %>.png">
           <img class="gif_box_download" src="/images/download.png">
         </div>
       </div>
