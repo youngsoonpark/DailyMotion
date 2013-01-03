@@ -4,18 +4,12 @@
     var CENTER_CROP_SIZE = 590;
     var centerCrop = function(image, desiredSize) {
       image.onload = function() {
-        console.log(image);
         var width = image.width;
-        console.log(width)
         var height = image.height;
-        console.log(height)
 
         var widthScaleRatio = desiredSize / width;
-        console.log(widthScaleRatio)
         var heightScaleRatio = desiredSize / height;
-        console.log(heightScaleRatio)
         var scaleRatio = Math.min(widthScaleRatio, heightScaleRatio);
-        console.log(scaleRatio)
 
         image.width = width * scaleRatio;
         image.height = height * scaleRatio;
