@@ -1,8 +1,5 @@
 package com.rejasupotaro.dailymotion.ui;
 
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-
 import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
@@ -27,7 +24,7 @@ import com.rejasupotaro.dailymotion.ui.helper.DailyMotionActivityHelper;
 import com.rejasupotaro.dailymotion.utils.ToastUtils;
 
 @ContentView(R.layout.activity_main)
-public class AnimationComposeActivity extends RoboFragmentActivity implements LoaderCallbacks<StatusLine> {
+public class AnimationComposeActivity extends RoboFragmentActivity implements LoaderCallbacks<Boolean> {
 
     private static final String TAG = AnimationComposeActivity.class.getSimpleName();
     private static final int REQUEST_UPLOAD = 1;
@@ -102,7 +99,7 @@ public class AnimationComposeActivity extends RoboFragmentActivity implements Lo
         }
     }
 
-    public Loader<StatusLine> onCreateLoader(int id, Bundle args) {
+    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
         switch (id) {
         case REQUEST_UPLOAD:
             mProgressDialog = new ProgressDialog(this);
@@ -118,16 +115,16 @@ public class AnimationComposeActivity extends RoboFragmentActivity implements Lo
         }
     }
 
-    public void onLoaderReset(Loader<StatusLine> loader) {
+    public void onLoaderReset(Loader<Boolean> loader) {
     }
 
-    public void onLoadFinished(Loader<StatusLine> loader, StatusLine result) {
+    public void onLoadFinished(Loader<Boolean> loader, Boolean result) {
         if(mProgressDialog != null && mProgressDialog.isShowing()){
             mProgressDialog.dismiss();
         }
         mProgressDialog = null;
 
-        if (result.getStatusCode() == HttpStatus.SC_OK) {
+        if (result) {
             ToastUtils.show(this, R.string.upload_completed);
             getSupportLoaderManager().destroyLoader(loader.getId());
         } else {

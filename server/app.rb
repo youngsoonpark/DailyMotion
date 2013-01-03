@@ -34,11 +34,11 @@ get '/api/get/images' do
 end
 
 post '/api/convert' do
-  output_path = 'images/gifs/1.gif'
+  output_path = '/images/gifs/1.gif'
 
   image_store = ImageStore.new
   last_id = image_store.get_last_id()
-  output_path = 'images/gifs/' + last_id.to_s + '.gif'
+  output_path = '/images/gifs/' + last_id.to_s + '.gif'
 
   image_title = params['image_title']
   zipfile = params['contents']
@@ -67,7 +67,7 @@ def zip_to_gif(src_path, output_path, delay)
     end
   end
   
-  command = convert_command_builder(image_path_array, delay, 360, output_path)
+  command = convert_command_builder(image_path_array, delay, 600, output_path)
   p command
   system(command)
   system('rm -rf tmp/*')

@@ -16,7 +16,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -43,7 +45,7 @@ import com.rejasupotaro.dailymotion.Constants;
 import com.rejasupotaro.dailymotion.model.AnimationEntity;
 import com.rejasupotaro.dailymotion.utils.CloseableUtils;
 
-public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
+public class DailyMotionApiClient extends AsyncTaskLoader<Boolean> {
 
     private static final String TAG = DailyMotionApiClient.class.getSimpleName();
     public static final String UPLOAD_IMAGE_TITLE = "image_title";
@@ -58,12 +60,14 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
     private Context mContext;
+    private HttpClient mHttpClient;
     private AnimationEntity mAnimationEntity;
     private String mResponseMessage;
-    private StatusLine mResult; // http://www.docjar.org/html/api/org/apache/commons/httpclient/TestStatusLine.java.html
+    private Boolean mResult; // http://www.docjar.org/html/api/org/apache/commons/httpclient/TestStatusLine.java.html
 
     public DailyMotionApiClient(Context context) {
         super(context);
+        mHttpClient = new DefaultHttpClient();
     }
 
     public DailyMotionApiClient(Context context, AnimationEntity animationEntity) {
@@ -75,28 +79,34 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
 
         mContext = context;
         mAnimationEntity = animationEntity;
+        mHttpClient = new DefaultHttpClient();
+    }
+
+    public DailyMotionApiClient(Context context, HttpClient httpClient) {
+        super(context);
+        mHttpClient = httpClient;
     }
 
     @Override
-    public StatusLine loadInBackground() {
+    public Boolean loadInBackground() {
         File zipFile = toZip(mContext.getExternalCacheDir().getPath() + "/out.zip", mAnimationEntity.getUriList());
 
-        StatusLine statusLine = null;
         try {
-            statusLine = fileUpload(Constants.API_GENERATE_GIF_URL,
+            return fileUpload(Constants.API_GENERATE_GIF_URL,
                     new NameValuePair(UPLOAD_IMAGE_TITLE, mAnimationEntity.getTitle()),
                     new NameValuePair(UPLOAD_FILE_CONTENTS, zipFile.getAbsolutePath()),
                     new NameValuePair(UPLOAD_ANIMATION_DELAY, String.valueOf(mAnimationEntity.getDelay())));
         } catch (IOException e) {
             Log.v(TAG, "Something wrong with fileUpload()");
+            return false;
+        } catch (HttpException e) {
+            Log.v(TAG, "Something wrong with getResponse()");
+            return false;
         }
-
-        return statusLine;
     }
 
-    public StatusLine fileUpload(String url, NameValuePair titleNameValuePair, NameValuePair fileNameValuePair,
-            NameValuePair delayNameValuePair) throws IOException {
-        final DefaultHttpClient httpClient = new DefaultHttpClient();
+    public boolean fileUpload(String url, NameValuePair titleNameValuePair, NameValuePair fileNameValuePair,
+            NameValuePair delayNameValuePair) throws IOException, HttpException {
         final HttpPost httpPost = new HttpPost(url);
 
         final MultipartEntity reqEntity =
@@ -110,12 +120,11 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
                 new StringBody(delayNameValuePair.getValue(), DEFAULT_CHARSET));
 
         httpPost.setEntity(reqEntity);
-        return getResponseStatusLine(httpClient, httpPost);
+        return getResponse(mHttpClient, httpPost);
     }
 
-    public StatusLine sendBinaryFile(String url,
-            String absoluteFilePath) throws IOException {
-        final DefaultHttpClient httpClient = new DefaultHttpClient();
+    public boolean sendBinaryFile(String url,
+            String absoluteFilePath) throws IOException, HttpException {
         final File file = new File(absoluteFilePath);
         final HttpPost httpPost = new HttpPost(url);
         // length==-1 then BUFF_SIZE=2048
@@ -124,33 +133,37 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
         reqEntity.setContentType(CONTENTTYPE_BINARY);
         reqEntity.setChunked(true);
         httpPost.setEntity(reqEntity);
-        return getResponseStatusLine(httpClient, httpPost);
+        return getResponse(mHttpClient, httpPost);
     }
 
-    public StatusLine sendSpecifiedFile(String url,
+    public boolean sendSpecifiedFile(String url,
             String absoluteFilePath,
-            String contentType) throws IOException  {
-        final DefaultHttpClient httpClient = new DefaultHttpClient();
+            String contentType) throws IOException, HttpException  {
         final File file = new File(absoluteFilePath);
         final HttpPost httpPost = new HttpPost(url);
         final FileEntity reqEntity = new FileEntity(file, contentType);
         reqEntity.setChunked(true);
         httpPost.setEntity(reqEntity);
-        return getResponseStatusLine(httpClient, httpPost);
+        return getResponse(mHttpClient, httpPost);
     }
 
     public String getResponseMessage() {
         return mResponseMessage;
     }
 
-    public StatusLine getResponseStatusLine(HttpClient httpClient,
+    public boolean getResponse(HttpClient httpClient,
             HttpRequestBase method)
-                    throws ClientProtocolException, IOException {
+                    throws ClientProtocolException, IOException, HttpException {
         HttpResponse response = null;
-        StatusLine status = null;
+        StatusLine statusLine = null;
         try {
             response = httpClient.execute(method);
-            status = response.getStatusLine();
+            statusLine = response.getStatusLine();
+
+            if (statusLine.getStatusCode() != HttpStatus.SC_OK) {
+                throw new HttpException();
+            }
+
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
                 InputStream content = responseEntity.getContent();
@@ -168,12 +181,12 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
                     reader.close();
                 }
             }
+            return true;
         } finally {
-            if (httpClient != null) {
+            if (httpClient != null && httpClient.getConnectionManager() != null) {
                 httpClient.getConnectionManager().shutdown();
             }
         }
-        return status;
     }
 
     private File toZip(String outputFilePath, List<Uri> inputFileUriList) {
@@ -230,7 +243,7 @@ public class DailyMotionApiClient extends AsyncTaskLoader<StatusLine> {
     }
 
     @Override
-    public void deliverResult(StatusLine result) {
+    public void deliverResult(Boolean result) {
         if (isReset()) {
             if (mResult != null) {
                 mResult = null;

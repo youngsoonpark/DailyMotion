@@ -4,16 +4,14 @@ body {
 }
 
 #content {
-  margin: 0 auto;
 }
 
 .gif_box {
   margin: 10px;
-  position: absolute;  
+  position: absolute;
   left: 50%;  
-  width: 1000px;
-  margin-left: -240px;
-  width: 480px;
+  margin-left: -300px;
+  width: 600px;
   text-align: center;
   background-color: #fff;
   -webkit-border-radius: 16px;
@@ -45,9 +43,6 @@ body {
 }
 
 .gif_image {
-  width: 470px;
-  height: 470px;
-  margin: 0 auto;
 }
 
 .gif_box_feedback {
