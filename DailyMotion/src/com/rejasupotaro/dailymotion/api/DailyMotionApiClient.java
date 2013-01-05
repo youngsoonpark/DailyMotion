@@ -136,7 +136,8 @@ public class DailyMotionApiClient extends AsyncTaskLoader<Boolean> {
         return getResponse(mHttpClient, httpPost);
     }
 
-    public boolean sendSpecifiedFile(String url,
+    public boolean sendSpecifiedFile(
+            String url,
             String absoluteFilePath,
             String contentType) throws IOException, HttpException  {
         final File file = new File(absoluteFilePath);

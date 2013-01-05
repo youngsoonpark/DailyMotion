@@ -85,9 +85,10 @@ public class DailyMotionActivityHelper extends AbstractActivityHelper {
 
     public void setupSplashAnimation(final Handler handler) {
         new Thread(new Runnable() {
-
             private static final int START_ANIMATION = 1000;
             private static final int RUN_INTERVAL = 50;
+            private static final int FONT_COLOR_DEPTH = 120;
+
             private int tick = 0;
             private int transparent = 255;
             private View splashView = getActivity().findViewById(R.id.view_splash);
@@ -109,7 +110,8 @@ public class DailyMotionActivityHelper extends AbstractActivityHelper {
 
                                 splashView.setBackgroundColor(Color.argb(transparent, 255, 255, 255));
                                 splashImageView.setAlpha(transparent);
-                                splashTextView.setTextColor(Color.argb(transparent, 120, 120, 120));
+                                splashTextView.setTextColor(
+                                        Color.argb(transparent, FONT_COLOR_DEPTH, FONT_COLOR_DEPTH, FONT_COLOR_DEPTH));
 
                                 if (transparent <= 0) {
                                     splashView.setVisibility(View.GONE);
@@ -119,7 +121,6 @@ public class DailyMotionActivityHelper extends AbstractActivityHelper {
                             }
                         });
                     }
-
                     tick += RUN_INTERVAL;
                 }
             }
