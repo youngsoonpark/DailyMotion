@@ -22,6 +22,8 @@
       var title = json["title"];
       var likeCount = json["like_count"];
 
+      if (likeCount > 0)
+        $(".gif_box_like").attr("src", "/images/like_on.png");
       $(".gif_box_like").click(function() {
         $(".gif_box_like").attr("src", "/images/like_on.png");
         $.ajax({
