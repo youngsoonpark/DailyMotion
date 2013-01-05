@@ -7,12 +7,10 @@ body {
 }
 
 .gif_box {
-  margin: 10px;
   position: absolute;
   left: 50%;  
   margin-left: -300px;
   width: 600px;
-  text-align: center;
   background-color: #fff;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;
@@ -25,7 +23,6 @@ body {
 
 .gif_box_info {
   float: left;
-  background-color: #fff;
 }
 
 .gif_box_icon {
@@ -43,27 +40,24 @@ body {
 }
 
 .gif_image {
+  vertical-align: middle;
 }
 
 .gif_box_feedback {
-  background-color: #fff;
   margin-top: 16px;
 }
 
 .gif_box_comment {
   float: left;
-  background-color: #fff;
 }
 
 .gif_box_like {
   float: left;
-  background-color: #fff;
   margin-left: 16px;
 }
 
 .gif_box_download {
   float: right;
-  background-color: #fff;
   margin-left: 16px;
 }
 

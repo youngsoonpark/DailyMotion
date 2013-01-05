@@ -21,7 +21,6 @@ body {
 }
 
 .gif_box_info {
-  background-color: #fff;
 }
 
 .gif_box_icon {
@@ -35,6 +34,10 @@ body {
   -webkit-box-shadow: 0 10px 6px -6px #777;
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 10px 6px -6px #777;
+}
+
+.gif_image {
+  vertical-align: middle;
 }
 
 @media only screen and (max-device-width : 1800px) {
@@ -54,22 +57,18 @@ body {
 }
 
 .gif_box_feedback {
-  background-color: #fff;
   margin-top: 16px;
 }
 
 .gif_box_comment {
-  background-color: #fff;
 }
 
 .gif_box_like {
-  background-color: #fff;
   margin-left: 16px;
 }
 
 .gif_box_download {
   float: right;
-  background-color: #fff;
   margin-left: 16px;
 }
 
