@@ -34,6 +34,7 @@ body {
   -webkit-box-shadow: 0 10px 6px -6px #777;
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 10px 6px -6px #777;
+  cursor: pointer;
 }
 
 .gif_image {
@@ -65,11 +66,13 @@ body {
 
 .gif_box_like {
   margin-left: 16px;
+  cursor: pointer;
 }
 
 .gif_box_download {
   float: right;
   margin-left: 16px;
+  cursor: pointer;
 }
 
 #pager {
@@ -87,5 +90,6 @@ body {
   text-shadow: 0 -1px 1px #FFF, -1px 0 1px #FFF, 1px 0 1px #aaa;
   -webkit-box-shadow: 1px 1px 2px #E7E7E7;
   -moz-box-shadow: 1px 1px 2px #E7E7E7;
+  cursor: pointer;
 }
 

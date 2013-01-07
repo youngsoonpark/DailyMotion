@@ -37,6 +37,7 @@ body {
   -webkit-box-shadow: 0 10px 6px -6px #777;
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 10px 6px -6px #777;
+  cursor: pointer;
 }
 
 .gif_image {
@@ -54,10 +55,12 @@ body {
 .gif_box_like {
   float: left;
   margin-left: 16px;
+  cursor: pointer;
 }
 
 .gif_box_download {
   float: right;
   margin-left: 16px;
+  cursor: pointer;
 }
 
